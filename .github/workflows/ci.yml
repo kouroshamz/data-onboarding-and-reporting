@@ -93,7 +93,7 @@ jobs:
           data = json.loads(report.read_text(encoding="utf-8"))
           summary = {
               "client": data["client"]["name"],
-              "generated_at": data["client"]["generated_at"],
+              "generated_at": data.get("generated_at"),
               "table_count": data["schema"]["table_count"],
               "industry": data["industry"],
               "pii_summary": data["pii"]["summary"],
