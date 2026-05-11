@@ -1,0 +1,28 @@
+spec_version: "1.0.0"
+section_order:
+  - executive_summary
+  - readiness_score
+  - top_business_risks
+  - source_inventory
+  - quality_scorecard
+  - relationship_map
+  - kpi_candidates
+  - seven_day_plan
+  - technical_appendix
+voice:
+  tone: "direct, executive, non-technical"
+  max_bullets_per_section: 5
+  avoid_terms:
+    - "best-in-class"
+    - "world-class"
+    - "game-changing"
+charts:
+  trend: "line"
+  category_comparison: "bar_horizontal"
+  distribution: "histogram"
+  quality_matrix: "heatmap"
+  outlier_check: "box"
+layout:
+  page_size: "A4"
+  include_logo: true
+  include_generation_timestamp: true

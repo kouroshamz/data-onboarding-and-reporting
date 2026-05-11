@@ -1,0 +1,58 @@
+spec_version: "1.0.0"
+
+client:
+  id: titanic_llm_demo
+  name: "Titanic Dataset (LLM Demo)"
+  industry: auto
+
+connection:
+  type: csv
+  host: tests/fixtures/datasets/01_titanic
+
+sampling:
+  enabled: true
+  small_table_threshold: 100000
+  max_sample_size: 10000
+
+analysis:
+  schema_discovery: true
+  data_profiling: true
+  quality_checks: true
+  pii_detection: true
+  relationship_inference: true
+  kpi_suggestions: true
+  outlier_method: iqr
+
+kpi:
+  auto_detect_industry: true
+  confidence_threshold: 0.3
+  max_recommendations: 10
+
+reporting:
+  format: [html, json, txt]
+  include_charts: true
+
+output:
+  directory: ./reports
+
+pipeline:
+  fail_on_partial: false
+
+logging:
+  level: INFO
+  file: ./logs/llm_demo.log
+
+llm:
+  enabled: true
+  provider: openai
+  model: gpt-4o-mini
+  api_key_env: OPENAI_API_KEY
+  temperature: 0.1
+  budget_limit_usd: 1.00
+  layers:
+    type_inspector: true
+    insight_detector: true
+    report_advisor: true
+  cache:
+    enabled: true
+    directory: .llm_cache

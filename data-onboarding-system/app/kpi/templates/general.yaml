@@ -1,0 +1,84 @@
+# General / Catch-all KPI Template
+# Used when no specific industry is detected
+
+industry: general
+
+detection_signals:
+  tables: []
+  columns: []
+
+confidence_threshold: 0.0
+
+kpis:
+  - name: "Row Growth Rate"
+    description: "Week-over-week change in total row count across key tables"
+    category: "Data Health"
+    priority: 1
+    formula_sql: |
+      -- Requires periodic snapshot; placeholder for comparison logic
+      SELECT table_name, row_count, snapshot_date
+      FROM data_inventory
+      ORDER BY snapshot_date DESC
+    required_fields: []
+    required_tables: []
+    grain: "weekly"
+    dimensions: ["table_name"]
+    blocked_by: []
+
+  - name: "Data Freshness Score"
+    description: "Days since last update across all monitored tables"
+    category: "Data Health"
+    priority: 2
+    formula_sql: |
+      SELECT table_name, MAX(updated_at) AS latest,
+        EXTRACT(DAY FROM NOW() - MAX(updated_at)) AS days_stale
+      FROM information_schema.tables t
+      CROSS JOIN LATERAL (SELECT MAX(updated_at) FROM t.table_name) sub
+      GROUP BY table_name
+    required_fields: []
+    required_tables: []
+    grain: "daily"
+    dimensions: ["table_name"]
+    blocked_by: []
+
+  - name: "Completeness Index"
+    description: "Average non-null rate across all profiled columns"
+    category: "Data Quality"
+    priority: 3
+    formula_sql: |
+      -- Computed from profiling results, not raw SQL
+      SELECT AVG(1.0 - null_rate) AS completeness_index
+      FROM column_profiles
+    required_fields: []
+    required_tables: []
+    grain: "per_run"
+    dimensions: ["table_name", "column_name"]
+    blocked_by: []
+
+  - name: "Duplicate Record Rate"
+    description: "Percentage of exact-duplicate rows across key tables"
+    category: "Data Quality"
+    priority: 4
+    formula_sql: |
+      SELECT COUNT(*) - COUNT(DISTINCT *) AS duplicate_count,
+        (COUNT(*) - COUNT(DISTINCT *))::float / NULLIF(COUNT(*), 0) AS dup_rate
+      FROM {table}
+    required_fields: []
+    required_tables: []
+    grain: "per_table"
+    dimensions: ["table_name"]
+    blocked_by: []
+
+  - name: "Schema Drift Score"
+    description: "Count of columns added, removed, or type-changed since last run"
+    category: "Governance"
+    priority: 5
+    formula_sql: |
+      -- Requires previous schema snapshot for comparison
+      SELECT column_name, old_type, new_type, change_type
+      FROM schema_diff
+    required_fields: []
+    required_tables: []
+    grain: "per_run"
+    dimensions: ["table_name"]
+    blocked_by: []

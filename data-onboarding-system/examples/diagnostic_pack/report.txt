@@ -1,0 +1,32 @@
+================================================================================
+  DATA ONBOARDING REPORT - Test E-commerce Company
+================================================================================
+
+SCHEMA SUMMARY
+--------------------------------------------------------------------------------
+Total Tables: 4
+Generated: 2026-02-05T14:51:26.566137
+
+DATA QUALITY OVERVIEW
+--------------------------------------------------------------------------------
+customers: Score 100.0/100
+order_items: Score 100.0/100
+orders: Score 87.5/100
+products: Score 100.0/100
+
+PII FINDINGS
+--------------------------------------------------------------------------------
+Tables with PII: 3/4
+Total PII columns: 6
+Risk Level: MEDIUM
+
+RELATIONSHIPS
+--------------------------------------------------------------------------------
+Found: 3 relationships
+
+RECOMMENDED KPIs
+--------------------------------------------------------------------------------
+Detected Industry: ecommerce (confidence: 100%)
+
+1. ✓ Average Order Value (AOV) - Average revenue per order
+2. ✓ Customer Lifetime Value (LTV) - Total revenue generated per customer over their lifetime

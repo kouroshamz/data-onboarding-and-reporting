@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Data Onboarding Report - {{ report.client.name }}</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      margin: 24px;
+      color: #1f2933;
+      line-height: 1.4;
+    }
+    h1, h2, h3 {
+      margin-bottom: 8px;
+      color: #102a43;
+    }
+    .meta {
+      color: #486581;
+      margin-bottom: 20px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: 12px;
+      margin: 12px 0 20px;
+    }
+    .card {
+      border: 1px solid #d9e2ec;
+      border-radius: 8px;
+      padding: 10px;
+      background: #f8fbff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0 16px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid #d9e2ec;
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f0f4f8;
+    }
+    .mono {
+      font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      background: #f0f4f8;
+      padding: 8px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Data Onboarding Report</h1>
+  <div class="meta">
+    <div><strong>Client:</strong> {{ report.client.name }} ({{ report.client.id }})</div>
+    <div><strong>Generated:</strong> {{ report.client.generated_at }}</div>
+    <div><strong>Industry:</strong> {{ report.industry.industry }} (confidence {{ "%.0f%%"|format((report.industry.confidence or 0) * 100) }})</div>
+  </div>
+
+  <h2>Executive Summary</h2>
+  <div class="grid">
+    <div class="card">
+      <strong>Total Tables</strong><br />
+      {{ report.schema.table_count }}
+    </div>
+    <div class="card">
+      <strong>PII Tables</strong><br />
+      {{ report.pii.summary.tables_with_pii }}/{{ report.pii.summary.total_tables_scanned }}
+    </div>
+    <div class="card">
+      <strong>Relationships</strong><br />
+      {{ report.relationships.relationships|length }}
+    </div>
+  </div>
+
+  <h2>Quality Scores</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Table</th>
+        <th>Quality Score</th>
+        <th>High Severity Findings</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for table_name, quality in report.quality.items() %}
+      <tr>
+        <td>{{ table_name }}</td>
+        <td>{{ quality.quality_score }}/100</td>
+        <td>{{ quality.severity_summary.high if quality.severity_summary else 0 }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>PII Summary</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Risk Metric</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Total PII Columns</td><td>{{ report.pii.summary.total_pii_columns }}</td></tr>
+      <tr><td>High Sensitivity</td><td>{{ report.pii.summary.high_sensitivity_count }}</td></tr>
+      <tr><td>Medium Sensitivity</td><td>{{ report.pii.summary.medium_sensitivity_count }}</td></tr>
+      <tr><td>Low Sensitivity</td><td>{{ report.pii.summary.low_sensitivity_count }}</td></tr>
+    </tbody>
+  </table>
+
+  <h2>KPI Recommendations</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>KPI</th>
+        <th>Description</th>
+        <th>Ready</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for kpi in report.kpis %}
+      <tr>
+        <td>{{ kpi.name }}</td>
+        <td>{{ kpi.description }}</td>
+        <td>{{ "Yes" if kpi.readiness.is_ready else "No" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Top Relationships</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Table A</th>
+        <th>Table B</th>
+        <th>Column</th>
+        <th>Cardinality</th>
+        <th>Confidence</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rel in report.relationships.relationships[:15] %}
+      <tr>
+        <td>{{ rel.table1 }}</td>
+        <td>{{ rel.table2 }}</td>
+        <td>{{ rel.column if rel.column is defined else rel.column1 ~ " -> " ~ rel.column2 }}</td>
+        <td>{{ rel.cardinality }}</td>
+        <td>{{ rel.confidence }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Generated Files</h2>
+  <div class="mono">
+report_data.json
+report.txt
+schema.json
+profile.json
+report.html
+report.pdf (if enabled)
+  </div>
+</body>
+</html>

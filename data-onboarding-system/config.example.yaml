@@ -1,0 +1,93 @@
+# Example configuration for data onboarding analysis
+
+spec_version: "1.0.0"
+
+client:
+  id: "client_001"
+  name: "Example Corp"
+  industry: "ecommerce"  # ecommerce, saas, marketing, auto, or general
+
+connection:
+  type: "postgresql"  # postgresql, mysql, csv, s3
+  host: "localhost"
+  port: 5432
+  database: "production"
+  username: "readonly_user"
+  password: "${DB_PASSWORD}"  # Use env vars for secrets
+  # connection_string: "postgresql://user:pass@host:port/db"  # Alternative
+
+  # For CSV: set type to "csv" and host to the directory path
+  # type: "csv"
+  # host: "./data/my_csvs"
+
+  # Connection options
+  read_only: true
+  timeout_seconds: 30
+  pool_size: 5
+
+sampling:
+  enabled: true
+  small_table_threshold: 100000  # Full scan if < 100K rows
+  medium_sample_rate: 0.10  # 10% for 100K-10M rows
+  large_sample_rate: 0.05   # 5% for >10M rows
+  max_sample_size: 1000000  # Never sample more than 1M rows
+  stratify_by_date: true     # If timestamp columns exist
+
+analysis:
+  # What to run
+  schema_discovery: true
+  data_profiling: true
+  quality_checks: true
+  pii_detection: true
+  relationship_inference: true
+  kpi_suggestions: true
+  
+  # Profiling options
+  top_values_limit: 10
+  outlier_method: "iqr"  # iqr, zscore
+  outlier_threshold: 3.0
+  
+  # Quality thresholds
+  max_null_percent: 50
+  min_freshness_days: 90
+  
+  # Relationship inference
+  max_tables_for_joins: 50
+  min_overlap_percent: 80
+
+kpi:
+  auto_detect_industry: true
+  confidence_threshold: 0.7
+  generate_sql_examples: true
+  max_recommendations: 7
+
+reporting:
+  format: ["html", "pdf", "json", "txt"]
+  include_charts: true
+  include_raw_stats: true
+  executive_summary_only: false
+  
+output:
+  directory: "./reports"
+  retention_days: 90
+
+pipeline:
+  require_human_qa: true
+  timeout_hours: 20
+  fail_on_partial: false  # Deliver partial results if some tables fail
+
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  file: "./logs/pipeline.log"
+  json_format: false
+
+# LLM configuration (optional — disable by setting enabled: false)
+llm:
+  enabled: false
+  provider: "openai"             # openai, anthropic, or local
+  model: "gpt-4o-mini"          # or gpt-4o, claude-3-sonnet, etc.
+  api_key_env: "OPENAI_API_KEY" # Name of env var holding the API key
+  temperature: 0.1
+  max_tokens: 4096
+  # cache_dir: ".llm_cache"     # Optional: cache LLM responses
+  # budget_usd: 5.0             # Optional: spending cap per run

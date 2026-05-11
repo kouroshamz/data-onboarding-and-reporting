@@ -1,0 +1,155 @@
+# E-commerce KPI Template
+# Each KPI includes all fields required by INTERFACE_CONTRACTS_V1.md §5
+
+industry: ecommerce
+
+detection_signals:
+  tables:
+    - orders
+    - products
+    - customers
+    - payments
+    - cart
+    - transactions
+    - order_items
+    - invoices
+  columns:
+    - order_id
+    - product_id
+    - customer_id
+    - order_total
+    - order_date
+    - quantity
+    - price
+    - revenue
+    - discount
+
+confidence_threshold: 0.6
+
+kpis:
+  - name: "Average Order Value (AOV)"
+    description: "Average revenue per order, key unit-economics health metric"
+    category: "Revenue"
+    priority: 1
+    formula_sql: |
+      SELECT
+        DATE_TRUNC('month', order_date) AS period,
+        AVG(order_total) AS aov,
+        COUNT(DISTINCT order_id) AS orders
+      FROM orders
+      WHERE order_date >= CURRENT_DATE - INTERVAL '12 months'
+      GROUP BY period ORDER BY period
+    required_fields: ["order_total", "order_id", "order_date"]
+    required_tables: ["orders"]
+    grain: "monthly"
+    dimensions: ["channel", "region", "segment"]
+    blocked_by: []
+
+  - name: "Customer Lifetime Value (LTV)"
+    description: "Total revenue per customer over lifetime - core retention metric"
+    category: "Revenue"
+    priority: 2
+    formula_sql: |
+      SELECT
+        customer_id,
+        SUM(order_total) AS lifetime_value,
+        COUNT(DISTINCT order_id) AS order_count,
+        MIN(order_date) AS first_order,
+        MAX(order_date) AS last_order
+      FROM orders
+      GROUP BY customer_id
+      ORDER BY lifetime_value DESC
+    required_fields: ["customer_id", "order_total", "order_id"]
+    required_tables: ["orders", "customers"]
+    grain: "per_customer"
+    dimensions: ["segment", "acquisition_channel", "cohort"]
+    blocked_by: []
+
+  - name: "Conversion Rate"
+    description: "Percentage of visitors/sessions that result in a purchase"
+    category: "Acquisition"
+    priority: 3
+    formula_sql: |
+      SELECT
+        DATE_TRUNC('week', order_date) AS period,
+        COUNT(DISTINCT order_id)::float / NULLIF(COUNT(DISTINCT customer_id), 0) AS conversion_rate
+      FROM orders
+      GROUP BY period ORDER BY period
+    required_fields: ["order_id", "customer_id", "order_date"]
+    required_tables: ["orders"]
+    grain: "weekly"
+    dimensions: ["channel", "device_type", "landing_page"]
+    blocked_by: []
+
+  - name: "Cart Abandonment Rate"
+    description: "Percentage of carts that do not convert to orders"
+    category: "Acquisition"
+    priority: 4
+    formula_sql: |
+      SELECT
+        COUNT(DISTINCT cart_id) - COUNT(DISTINCT order_id) AS abandoned,
+        COUNT(DISTINCT cart_id) AS total_carts,
+        1.0 - COUNT(DISTINCT order_id)::float / NULLIF(COUNT(DISTINCT cart_id), 0) AS abandonment_rate
+      FROM cart LEFT JOIN orders USING (cart_id)
+    required_fields: ["cart_id"]
+    required_tables: ["cart"]
+    grain: "daily"
+    dimensions: ["device_type", "payment_method"]
+    blocked_by: []
+
+  - name: "Revenue Growth Rate"
+    description: "Month-over-month revenue change percentage"
+    category: "Revenue"
+    priority: 5
+    formula_sql: |
+      WITH monthly AS (
+        SELECT DATE_TRUNC('month', order_date) AS m, SUM(order_total) AS rev
+        FROM orders GROUP BY m
+      )
+      SELECT m, rev,
+        (rev - LAG(rev) OVER (ORDER BY m)) / NULLIF(LAG(rev) OVER (ORDER BY m), 0) AS growth_rate
+      FROM monthly ORDER BY m
+    required_fields: ["order_total", "order_date"]
+    required_tables: ["orders"]
+    grain: "monthly"
+    dimensions: ["product_category", "region"]
+    blocked_by: []
+
+  - name: "Customer Retention Rate"
+    description: "Percentage of customers who return for a repeat purchase"
+    category: "Retention"
+    priority: 6
+    formula_sql: |
+      WITH first_order AS (
+        SELECT customer_id, MIN(order_date) AS first_date FROM orders GROUP BY customer_id
+      ),
+      repeat_order AS (
+        SELECT DISTINCT o.customer_id
+        FROM orders o JOIN first_order f ON o.customer_id = f.customer_id
+        WHERE o.order_date > f.first_date + INTERVAL '30 days'
+      )
+      SELECT COUNT(DISTINCT r.customer_id)::float / NULLIF(COUNT(DISTINCT f.customer_id), 0) AS retention_rate
+      FROM first_order f LEFT JOIN repeat_order r USING (customer_id)
+    required_fields: ["customer_id", "order_date"]
+    required_tables: ["orders", "customers"]
+    grain: "monthly"
+    dimensions: ["segment", "cohort"]
+    blocked_by: []
+
+  - name: "Average Items Per Order"
+    description: "Order basket depth metric"
+    category: "Product"
+    priority: 7
+    formula_sql: |
+      SELECT
+        DATE_TRUNC('month', o.order_date) AS period,
+        AVG(item_cnt) AS avg_items_per_order
+      FROM orders o
+      JOIN (SELECT order_id, COUNT(*) AS item_cnt FROM order_items GROUP BY order_id) oi
+        ON o.order_id = oi.order_id
+      GROUP BY period ORDER BY period
+    required_fields: ["order_id"]
+    required_tables: ["orders", "order_items"]
+    grain: "monthly"
+    dimensions: ["product_category"]
+    blocked_by: []

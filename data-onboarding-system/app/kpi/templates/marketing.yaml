@@ -1,0 +1,146 @@
+# Marketing / Leads KPI Template
+# Each KPI includes all fields required by INTERFACE_CONTRACTS_V1.md §5
+
+industry: marketing
+
+detection_signals:
+  tables:
+    - leads
+    - campaigns
+    - conversions
+    - contacts
+    - channels
+    - ads
+    - landing_pages
+    - events
+  columns:
+    - lead_id
+    - campaign_id
+    - source
+    - channel
+    - conversion
+    - click
+    - impression
+    - spend
+    - cost
+
+confidence_threshold: 0.6
+
+kpis:
+  - name: "Cost Per Lead (CPL)"
+    description: "Average cost to generate a qualified lead"
+    category: "Acquisition"
+    priority: 1
+    formula_sql: |
+      SELECT
+        DATE_TRUNC('month', l.created_at) AS period,
+        SUM(c.spend) / NULLIF(COUNT(DISTINCT l.lead_id), 0) AS cpl
+      FROM leads l
+      JOIN campaigns c ON l.campaign_id = c.campaign_id
+      GROUP BY period ORDER BY period
+    required_fields: ["lead_id", "campaign_id"]
+    required_tables: ["leads", "campaigns"]
+    grain: "monthly"
+    dimensions: ["channel", "campaign", "region"]
+    blocked_by: []
+
+  - name: "Lead-to-Customer Conversion Rate"
+    description: "Percentage of leads that become paying customers"
+    category: "Conversion"
+    priority: 2
+    formula_sql: |
+      SELECT
+        COUNT(DISTINCT CASE WHEN status = 'converted' THEN lead_id END)::float /
+        NULLIF(COUNT(DISTINCT lead_id), 0) AS conversion_rate
+      FROM leads
+    required_fields: ["lead_id", "status"]
+    required_tables: ["leads"]
+    grain: "monthly"
+    dimensions: ["source", "campaign", "segment"]
+    blocked_by: []
+
+  - name: "Return on Ad Spend (ROAS)"
+    description: "Revenue generated per dollar of advertising spend"
+    category: "Revenue"
+    priority: 3
+    formula_sql: |
+      SELECT
+        c.campaign_id,
+        c.name AS campaign_name,
+        SUM(conv.revenue) / NULLIF(SUM(c.spend), 0) AS roas
+      FROM campaigns c
+      JOIN conversions conv ON c.campaign_id = conv.campaign_id
+      GROUP BY c.campaign_id, c.name
+      ORDER BY roas DESC
+    required_fields: ["campaign_id", "revenue", "spend"]
+    required_tables: ["campaigns", "conversions"]
+    grain: "monthly"
+    dimensions: ["channel", "campaign_type"]
+    blocked_by: []
+
+  - name: "Click-Through Rate (CTR)"
+    description: "Percentage of impressions that result in a click"
+    category: "Engagement"
+    priority: 4
+    formula_sql: |
+      SELECT
+        campaign_id,
+        SUM(clicks)::float / NULLIF(SUM(impressions), 0) AS ctr
+      FROM campaigns
+      GROUP BY campaign_id
+    required_fields: ["campaign_id"]
+    required_tables: ["campaigns"]
+    grain: "daily"
+    dimensions: ["channel", "ad_format", "audience"]
+    blocked_by: []
+
+  - name: "Marketing Qualified Leads (MQL) Rate"
+    description: "Percentage of leads that meet qualification criteria"
+    category: "Quality"
+    priority: 5
+    formula_sql: |
+      SELECT
+        DATE_TRUNC('month', created_at) AS period,
+        COUNT(DISTINCT CASE WHEN is_qualified THEN lead_id END)::float /
+        NULLIF(COUNT(DISTINCT lead_id), 0) AS mql_rate
+      FROM leads
+      GROUP BY period ORDER BY period
+    required_fields: ["lead_id"]
+    required_tables: ["leads"]
+    grain: "monthly"
+    dimensions: ["source", "campaign"]
+    blocked_by: []
+
+  - name: "Customer Acquisition Cost (CAC)"
+    description: "Total marketing cost divided by new customers acquired"
+    category: "Acquisition"
+    priority: 6
+    formula_sql: |
+      SELECT
+        DATE_TRUNC('month', l.created_at) AS period,
+        SUM(c.spend) / NULLIF(COUNT(DISTINCT CASE WHEN l.status = 'converted' THEN l.lead_id END), 0) AS cac
+      FROM leads l
+      JOIN campaigns c ON l.campaign_id = c.campaign_id
+      GROUP BY period ORDER BY period
+    required_fields: ["lead_id", "campaign_id", "status"]
+    required_tables: ["leads", "campaigns"]
+    grain: "monthly"
+    dimensions: ["channel"]
+    blocked_by: []
+
+  - name: "Email Open / Engagement Rate"
+    description: "Percentage of delivered emails that are opened"
+    category: "Engagement"
+    priority: 7
+    formula_sql: |
+      SELECT
+        campaign_id,
+        SUM(CASE WHEN opened THEN 1 ELSE 0 END)::float / NULLIF(COUNT(*), 0) AS open_rate
+      FROM events
+      WHERE event_type = 'email_sent'
+      GROUP BY campaign_id
+    required_fields: ["campaign_id"]
+    required_tables: ["events"]
+    grain: "weekly"
+    dimensions: ["segment", "campaign"]
+    blocked_by: []

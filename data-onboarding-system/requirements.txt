@@ -1,0 +1,34 @@
+# Core
+pydantic>=2.5.0
+pyyaml>=6.0
+
+# Database
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0        # PostgreSQL
+pymysql>=1.1.0                 # MySQL
+
+# Data processing
+pandas>=2.1.0
+numpy>=1.24.0
+
+# Statistical analysis
+scipy>=1.11.0                  # Optional: distribution tests in profiling
+
+# Reporting
+jinja2>=3.1.0
+weasyprint>=60.0               # Optional: PDF export (requires system libs)
+
+# Security
+python-dotenv>=1.0.0
+
+# Utilities
+click>=8.1.0
+loguru>=0.7.0
+
+# LLM (optional — providers lazy-imported)
+openai>=1.0.0                  # Optional: OpenAI provider
+# anthropic>=0.20.0            # Optional: Anthropic provider (uncomment if needed)
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0

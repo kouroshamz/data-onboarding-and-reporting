@@ -1,0 +1,152 @@
+# SaaS / Subscription KPI Template
+# Each KPI includes all fields required by INTERFACE_CONTRACTS_V1.md §5
+
+industry: saas
+
+detection_signals:
+  tables:
+    - subscriptions
+    - users
+    - invoices
+    - payments
+    - events
+    - plans
+    - trials
+    - accounts
+  columns:
+    - subscription_id
+    - user_id
+    - mrr
+    - arr
+    - status
+    - plan_id
+    - churn
+    - trial
+
+confidence_threshold: 0.6
+
+kpis:
+  - name: "Monthly Recurring Revenue (MRR)"
+    description: "Predictable monthly revenue from active subscriptions"
+    category: "Revenue"
+    priority: 1
+    formula_sql: |
+      SELECT
+        DATE_TRUNC('month', created_at) AS period,
+        SUM(mrr) AS total_mrr,
+        COUNT(DISTINCT subscription_id) AS active_subs
+      FROM subscriptions
+      WHERE status = 'active'
+      GROUP BY period ORDER BY period
+    required_fields: ["mrr", "subscription_id", "status"]
+    required_tables: ["subscriptions"]
+    grain: "monthly"
+    dimensions: ["plan_id", "segment", "region"]
+    blocked_by: []
+
+  - name: "Churn Rate"
+    description: "Percentage of subscriptions lost per period"
+    category: "Retention"
+    priority: 2
+    formula_sql: |
+      WITH period_start AS (
+        SELECT COUNT(DISTINCT subscription_id) AS start_ct
+        FROM subscriptions WHERE status = 'active'
+          AND created_at < DATE_TRUNC('month', CURRENT_DATE)
+      ),
+      churned AS (
+        SELECT COUNT(DISTINCT subscription_id) AS churn_ct
+        FROM subscriptions WHERE status = 'cancelled'
+          AND cancelled_at >= DATE_TRUNC('month', CURRENT_DATE) - INTERVAL '1 month'
+      )
+      SELECT churn_ct::float / NULLIF(start_ct, 0) AS churn_rate
+      FROM period_start, churned
+    required_fields: ["subscription_id", "status"]
+    required_tables: ["subscriptions"]
+    grain: "monthly"
+    dimensions: ["plan_id", "cancellation_reason"]
+    blocked_by: []
+
+  - name: "Customer Acquisition Cost (CAC)"
+    description: "Average cost to acquire a new paying customer"
+    category: "Acquisition"
+    priority: 3
+    formula_sql: |
+      SELECT
+        DATE_TRUNC('month', u.created_at) AS period,
+        SUM(marketing_spend) / NULLIF(COUNT(DISTINCT u.user_id), 0) AS cac
+      FROM users u
+      JOIN campaigns c ON u.acquisition_source = c.campaign_id
+      GROUP BY period ORDER BY period
+    required_fields: ["user_id"]
+    required_tables: ["users"]
+    grain: "monthly"
+    dimensions: ["channel", "campaign"]
+    blocked_by: ["campaigns"]
+
+  - name: "Net Revenue Retention (NRR)"
+    description: "Revenue retained from existing customers including expansion"
+    category: "Revenue"
+    priority: 4
+    formula_sql: |
+      WITH m1 AS (
+        SELECT SUM(mrr) AS start_mrr FROM subscriptions
+        WHERE status = 'active' AND created_at < DATE_TRUNC('month', CURRENT_DATE) - INTERVAL '1 month'
+      ),
+      m2 AS (
+        SELECT SUM(mrr) AS end_mrr FROM subscriptions
+        WHERE status = 'active' AND created_at < DATE_TRUNC('month', CURRENT_DATE)
+      )
+      SELECT end_mrr::float / NULLIF(start_mrr, 0) AS nrr FROM m1, m2
+    required_fields: ["mrr", "status"]
+    required_tables: ["subscriptions"]
+    grain: "monthly"
+    dimensions: ["plan_id", "segment"]
+    blocked_by: []
+
+  - name: "Trial-to-Paid Conversion Rate"
+    description: "Percentage of trial users that convert to paid"
+    category: "Acquisition"
+    priority: 5
+    formula_sql: |
+      SELECT
+        COUNT(DISTINCT CASE WHEN status = 'active' THEN subscription_id END)::float /
+        NULLIF(COUNT(DISTINCT CASE WHEN trial = true THEN subscription_id END), 0) AS trial_conversion
+      FROM subscriptions
+    required_fields: ["subscription_id", "status"]
+    required_tables: ["subscriptions"]
+    grain: "monthly"
+    dimensions: ["plan_id", "source"]
+    blocked_by: []
+
+  - name: "Average Revenue Per User (ARPU)"
+    description: "Monthly revenue divided by active user count"
+    category: "Revenue"
+    priority: 6
+    formula_sql: |
+      SELECT
+        DATE_TRUNC('month', created_at) AS period,
+        SUM(mrr) / NULLIF(COUNT(DISTINCT user_id), 0) AS arpu
+      FROM subscriptions WHERE status = 'active'
+      GROUP BY period ORDER BY period
+    required_fields: ["mrr", "user_id"]
+    required_tables: ["subscriptions"]
+    grain: "monthly"
+    dimensions: ["plan_id", "segment"]
+    blocked_by: []
+
+  - name: "LTV:CAC Ratio"
+    description: "Ratio of customer lifetime value to acquisition cost"
+    category: "Unit Economics"
+    priority: 7
+    formula_sql: |
+      WITH ltv AS (
+        SELECT user_id, SUM(amount) AS lifetime_value FROM invoices GROUP BY user_id
+      )
+      SELECT AVG(lifetime_value) AS avg_ltv
+      FROM ltv
+    required_fields: ["user_id"]
+    required_tables: ["invoices", "users"]
+    grain: "quarterly"
+    dimensions: ["plan_id", "channel"]
+    blocked_by: ["campaigns"]

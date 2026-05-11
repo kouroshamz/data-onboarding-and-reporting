@@ -1,0 +1,218 @@
+# IoT / Telemetry / Fleet Management KPI Template
+# Each KPI includes all fields required by INTERFACE_CONTRACTS_V1.md §5
+
+industry: iot
+
+detection_signals:
+  tables:
+    - device
+    - telemetry
+    - sensor
+    - gateway
+    - tracker
+    - equipment
+    - asset
+    - fleet
+  columns:
+    - device_id
+    - device
+    - sensor
+    - battery
+    - voltage
+    - signal
+    - temperature
+    - humidity
+    - latitude
+    - longitude
+    - telemetry
+    - reading
+    - measurement
+    - timestamp
+    - last_seen
+    - last_report
+
+confidence_threshold: 0.6
+
+kpis:
+  - name: "Device Health Score"
+    category: "Operations"
+    description: "Overall health of IoT device fleet based on battery, connectivity, and reporting frequency"
+    priority: 1
+    formula_sql: |
+      SELECT
+        COUNT(DISTINCT device_id) AS total_devices,
+        AVG(CASE
+          WHEN battery >= 50 THEN 100
+          WHEN battery >= 20 THEN 70
+          WHEN battery >= 10 THEN 40
+          ELSE 20
+        END) AS avg_health_score
+      FROM telemetry
+      WHERE timestamp >= CURRENT_DATE - INTERVAL '7 days'
+    required_fields: ["device_id"]
+    required_tables: ["telemetry"]
+    grain: "daily"
+    dimensions: ["model", "location"]
+    blocked_by: []
+    # Legacy compat
+    required_columns:
+      any_of: ["device", "device_id"]
+    optional_columns: ["battery", "voltage", "last_report_time", "last_seen"]
+    sql_template: |
+      SELECT
+        COUNT(DISTINCT {device_col}) AS total_devices,
+        AVG(CASE WHEN {battery_col} >= 50 THEN 100 WHEN {battery_col} >= 20 THEN 70 WHEN {battery_col} >= 10 THEN 40 ELSE 20 END) AS avg_health_score
+      FROM {table}
+      WHERE {timestamp_col} >= CURRENT_DATE - INTERVAL '7 days'
+
+  - name: "Battery Performance Index"
+    category: "Maintenance"
+    description: "Monitor battery levels and predict maintenance needs"
+    priority: 2
+    formula_sql: |
+      SELECT
+        AVG(battery) AS avg_battery_level,
+        MIN(battery) AS min_battery_level,
+        COUNT(CASE WHEN battery < 20 THEN 1 END) AS low_battery_count,
+        COUNT(CASE WHEN battery < 10 THEN 1 END) AS critical_battery_count
+      FROM telemetry
+      WHERE timestamp >= CURRENT_DATE - INTERVAL '7 days'
+    required_fields: ["battery"]
+    required_tables: ["telemetry"]
+    grain: "daily"
+    dimensions: ["device_id", "model"]
+    blocked_by: []
+    required_columns:
+      any_of: ["battery", "batterypercentage", "battery_level", "battery_percent"]
+    sql_template: |
+      SELECT AVG({battery_col}) AS avg_battery_level, MIN({battery_col}) AS min_battery_level,
+        COUNT(CASE WHEN {battery_col} < 20 THEN 1 END) AS low_battery_count,
+        COUNT(CASE WHEN {battery_col} < 10 THEN 1 END) AS critical_battery_count
+      FROM {table} WHERE {timestamp_col} >= CURRENT_DATE - INTERVAL '7 days'
+
+  - name: "Device Uptime & Connectivity"
+    category: "Operations"
+    description: "Track device connectivity and identify offline devices"
+    priority: 3
+    formula_sql: |
+      SELECT
+        COUNT(DISTINCT device_id) AS total_devices,
+        COUNT(DISTINCT CASE WHEN timestamp >= NOW() - INTERVAL '1 hour' THEN device_id END) AS active_last_hour,
+        COUNT(DISTINCT CASE WHEN timestamp >= NOW() - INTERVAL '24 hours' THEN device_id END) AS active_last_day,
+        COUNT(DISTINCT CASE WHEN timestamp < NOW() - INTERVAL '7 days' THEN device_id END) AS offline_devices
+      FROM telemetry
+    required_fields: ["device_id", "timestamp"]
+    required_tables: ["telemetry"]
+    grain: "hourly"
+    dimensions: ["model", "location"]
+    blocked_by: []
+    required_columns:
+      any_of: ["last_report_time", "last_seen", "timestamp", "updated_at"]
+    sql_template: |
+      SELECT COUNT(DISTINCT {device_col}) AS total_devices,
+        COUNT(DISTINCT CASE WHEN {timestamp_col} >= NOW() - INTERVAL '1 hour' THEN {device_col} END) AS active_last_hour,
+        COUNT(DISTINCT CASE WHEN {timestamp_col} >= NOW() - INTERVAL '24 hours' THEN {device_col} END) AS active_last_day,
+        COUNT(DISTINCT CASE WHEN {timestamp_col} < NOW() - INTERVAL '7 days' THEN {device_col} END) AS offline_devices
+      FROM {table}
+
+  - name: "Report Frequency & Data Quality"
+    category: "Data Quality"
+    description: "Monitor reporting patterns and detect anomalies"
+    priority: 4
+    formula_sql: |
+      SELECT
+        device_id,
+        COUNT(*) AS total_reports,
+        MAX(timestamp) AS last_report,
+        MIN(timestamp) AS first_report,
+        COUNT(*)::float / NULLIF(EXTRACT(DAY FROM MAX(timestamp) - MIN(timestamp)), 0) AS avg_reports_per_day
+      FROM telemetry
+      GROUP BY device_id HAVING COUNT(*) > 1
+    required_fields: ["device_id", "timestamp"]
+    required_tables: ["telemetry"]
+    grain: "daily"
+    dimensions: ["device_id"]
+    blocked_by: []
+    required_columns:
+      any_of: ["sequence_no", "number_of_reports", "report_count"]
+    optional_columns: ["timestamp", "last_report_time"]
+    sql_template: |
+      SELECT {device_col}, COUNT(*) AS total_reports, MAX({timestamp_col}) AS last_report,
+        MIN({timestamp_col}) AS first_report
+      FROM {table} GROUP BY {device_col} HAVING COUNT(*) > 1
+
+  - name: "Voltage Stability & Anomalies"
+    category: "Maintenance"
+    description: "Detect voltage anomalies that may indicate hardware issues"
+    priority: 5
+    formula_sql: |
+      WITH voltage_stats AS (
+        SELECT AVG(voltage) AS mean_voltage, STDDEV(voltage) AS stddev_voltage FROM telemetry
+      )
+      SELECT device_id, voltage, timestamp,
+        ((voltage - mean_voltage) / NULLIF(stddev_voltage, 0)) AS z_score
+      FROM telemetry, voltage_stats
+      WHERE ABS((voltage - mean_voltage) / NULLIF(stddev_voltage, 0)) > 2
+      ORDER BY ABS((voltage - mean_voltage) / NULLIF(stddev_voltage, 0)) DESC
+    required_fields: ["voltage"]
+    required_tables: ["telemetry"]
+    grain: "daily"
+    dimensions: ["device_id"]
+    blocked_by: []
+    required_columns:
+      any_of: ["voltage", "battery_voltage", "batteryvoltage"]
+    sql_template: |
+      WITH voltage_stats AS (SELECT AVG({voltage_col}) AS mean_voltage, STDDEV({voltage_col}) AS stddev_voltage FROM {table})
+      SELECT {device_col}, {voltage_col}, {timestamp_col},
+        (({voltage_col} - mean_voltage) / NULLIF(stddev_voltage, 0)) AS z_score
+      FROM {table}, voltage_stats
+      WHERE ABS(({voltage_col} - mean_voltage) / NULLIF(stddev_voltage, 0)) > 2
+
+  - name: "Fleet Coverage & Deployment"
+    category: "Operations"
+    description: "Track device deployment and geographical coverage"
+    priority: 6
+    formula_sql: |
+      SELECT
+        COUNT(DISTINCT device_id) AS total_devices,
+        MAX(timestamp) AS last_activity,
+        MIN(timestamp) AS first_activity
+      FROM telemetry
+    required_fields: ["device_id"]
+    required_tables: ["telemetry"]
+    grain: "weekly"
+    dimensions: ["model", "location"]
+    blocked_by: []
+    required_columns:
+      any_of: ["device", "device_id"]
+    optional_columns: ["model", "location", "latitude", "longitude"]
+    sql_template: |
+      SELECT COUNT(DISTINCT {device_col}) AS total_devices,
+        MAX({timestamp_col}) AS last_activity, MIN({timestamp_col}) AS first_activity
+      FROM {table}
+
+  - name: "Critical Alert Rate"
+    category: "Alerts"
+    description: "Monitor critical conditions requiring immediate attention"
+    priority: 7
+    formula_sql: |
+      SELECT
+        COUNT(DISTINCT device_id) AS devices_with_alerts,
+        COUNT(*) AS total_critical_readings,
+        COUNT(CASE WHEN battery < 10 THEN 1 END) AS critical_battery_alerts,
+        COUNT(CASE WHEN voltage < 3.5 THEN 1 END) AS critical_voltage_alerts
+      FROM telemetry
+      WHERE timestamp >= CURRENT_DATE - INTERVAL '24 hours'
+        AND (battery < 10 OR voltage < 3.5)
+    required_fields: ["battery", "voltage"]
+    required_tables: ["telemetry"]
+    grain: "daily"
+    dimensions: ["device_id", "alert_type"]
+    blocked_by: []
+    required_columns:
+      any_of: ["battery", "voltage"]
+    sql_template: |
+      SELECT COUNT(DISTINCT {device_col}) AS devices_with_alerts,
+        COUNT(CASE WHEN {battery_col} < 10 THEN 1 END) AS critical_battery_alerts,
+        COUNT(CASE WHEN {voltage_col} < 3.5 THEN 1 END) AS critical_voltage_alerts
+      FROM {table} WHERE {timestamp_col} >= CURRENT_DATE - INTERVAL '24 hours'

@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  test-postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: testdb
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpass
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U testuser -d testdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./tests/fixtures/init_test_db.sql:/docker-entrypoint-initdb.d/init.sql

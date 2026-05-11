@@ -1,0 +1,1657 @@
+{
+  "client": {
+    "id": "test_001",
+    "name": "Test E-commerce Company",
+    "industry": "ecommerce"
+  },
+  "generated_at": "2026-02-05T14:51:26.566137",
+  "schema": {
+    "extracted_at": "2026-02-05T14:51:26.396063",
+    "schema_name": "public",
+    "table_count": 4,
+    "tables": {
+      "customers": {
+        "row_count": 4,
+        "size_category": "small",
+        "column_count": 5,
+        "columns": [
+          {
+            "column_name": "customer_id",
+            "data_type": "integer",
+            "is_nullable": "NO",
+            "column_default": "nextval('customers_customer_id_seq'::regclass)",
+            "character_maximum_length": NaN,
+            "numeric_precision": 32.0,
+            "numeric_scale": 0.0
+          },
+          {
+            "column_name": "email",
+            "data_type": "character varying",
+            "is_nullable": "NO",
+            "column_default": NaN,
+            "character_maximum_length": 255.0,
+            "numeric_precision": NaN,
+            "numeric_scale": NaN
+          },
+          {
+            "column_name": "first_name",
+            "data_type": "character varying",
+            "is_nullable": "YES",
+            "column_default": NaN,
+            "character_maximum_length": 100.0,
+            "numeric_precision": NaN,
+            "numeric_scale": NaN
+          },
+          {
+            "column_name": "last_name",
+            "data_type": "character varying",
+            "is_nullable": "YES",
+            "column_default": NaN,
+            "character_maximum_length": 100.0,
+            "numeric_precision": NaN,
+            "numeric_scale": NaN
+          },
+          {
+            "column_name": "created_at",
+            "data_type": "timestamp without time zone",
+            "is_nullable": "YES",
+            "column_default": "CURRENT_TIMESTAMP",
+            "character_maximum_length": NaN,
+            "numeric_precision": NaN,
+            "numeric_scale": NaN
+          }
+        ],
+        "primary_keys": [
+          "customer_id"
+        ],
+        "foreign_keys": [],
+        "indexes": [
+          {
+            "index_name": "customers_email_key",
+            "column_names": [
+              "email"
+            ],
+            "is_unique": true
+          },
+          {
+            "index_name": "customers_pkey",
+            "column_names": [
+              "customer_id"
+            ],
+            "is_unique": true
+          }
+        ],
+        "has_primary_key": true,
+        "has_foreign_keys": false
+      },
+      "order_items": {
+        "row_count": 4,
+        "size_category": "small",
+        "column_count": 5,
+        "columns": [
+          {
+            "column_name": "order_item_id",
+            "data_type": "integer",
+            "is_nullable": "NO",
+            "column_default": "nextval('order_items_order_item_id_seq'::regclass)",
+            "character_maximum_length": null,
+            "numeric_precision": 32,
+            "numeric_scale": 0
+          },
+          {
+            "column_name": "order_id",
+            "data_type": "integer",
+            "is_nullable": "YES",
+            "column_default": NaN,
+            "character_maximum_length": null,
+            "numeric_precision": 32,
+            "numeric_scale": 0
+          },
+          {
+            "column_name": "product_id",
+            "data_type": "integer",
+            "is_nullable": "YES",
+            "column_default": NaN,
+            "character_maximum_length": null,
+            "numeric_precision": 32,
+            "numeric_scale": 0
+          },
+          {
+            "column_name": "quantity",
+            "data_type": "integer",
+            "is_nullable": "NO",
+            "column_default": NaN,
+            "character_maximum_length": null,
+            "numeric_precision": 32,
+            "numeric_scale": 0
+          },
+          {
+            "column_name": "price",
+            "data_type": "numeric",
+            "is_nullable": "NO",
+            "column_default": NaN,
+            "character_maximum_length": null,
+            "numeric_precision": 10,
+            "numeric_scale": 2
+          }
+        ],
+        "primary_keys": [
+          "order_item_id"
+        ],
+        "foreign_keys": [
+          {
+            "column_name": "order_id",
+            "foreign_table": "orders",
+            "foreign_column": "order_id"
+          },
+          {
+            "column_name": "product_id",
+            "foreign_table": "products",
+            "foreign_column": "product_id"
+          }
+        ],
+        "indexes": [
+          {
+            "index_name": "order_items_pkey",
+            "column_names": [
+              "order_item_id"
+            ],
+            "is_unique": true
+          }
+        ],
+        "has_primary_key": true,
+        "has_foreign_keys": true
+      },
+      "orders": {
+        "row_count": 4,
+        "size_category": "small",
+        "column_count": 5,
+        "columns": [
+          {
+            "column_name": "order_id",
+            "data_type": "integer",
+            "is_nullable": "NO",
+            "column_default": "nextval('orders_order_id_seq'::regclass)",
+            "character_maximum_length": NaN,
+            "numeric_precision": 32.0,
+            "numeric_scale": 0.0
+          },
+          {
+            "column_name": "customer_id",
+            "data_type": "integer",
+            "is_nullable": "YES",
+            "column_default": NaN,
+            "character_maximum_length": NaN,
+            "numeric_precision": 32.0,
+            "numeric_scale": 0.0
+          },
+          {
+            "column_name": "order_total",
+            "data_type": "numeric",
+            "is_nullable": "NO",
+            "column_default": NaN,
+            "character_maximum_length": NaN,
+            "numeric_precision": 10.0,
+            "numeric_scale": 2.0
+          },
+          {
+            "column_name": "order_date",
+            "data_type": "timestamp without time zone",
+            "is_nullable": "YES",
+            "column_default": "CURRENT_TIMESTAMP",
+            "character_maximum_length": NaN,
+            "numeric_precision": NaN,
+            "numeric_scale": NaN
+          },
+          {
+            "column_name": "status",
+            "data_type": "character varying",
+            "is_nullable": "YES",
+            "column_default": "'pending'::character varying",
+            "character_maximum_length": 50.0,
+            "numeric_precision": NaN,
+            "numeric_scale": NaN
+          }
+        ],
+        "primary_keys": [
+          "order_id"
+        ],
+        "foreign_keys": [
+          {
+            "column_name": "customer_id",
+            "foreign_table": "customers",
+            "foreign_column": "customer_id"
+          }
+        ],
+        "indexes": [
+          {
+            "index_name": "orders_pkey",
+            "column_names": [
+              "order_id"
+            ],
+            "is_unique": true
+          }
+        ],
+        "has_primary_key": true,
+        "has_foreign_keys": true
+      },
+      "products": {
+        "row_count": 3,
+        "size_category": "small",
+        "column_count": 5,
+        "columns": [
+          {
+            "column_name": "product_id",
+            "data_type": "integer",
+            "is_nullable": "NO",
+            "column_default": "nextval('products_product_id_seq'::regclass)",
+            "character_maximum_length": NaN,
+            "numeric_precision": 32.0,
+            "numeric_scale": 0.0
+          },
+          {
+            "column_name": "product_name",
+            "data_type": "character varying",
+            "is_nullable": "NO",
+            "column_default": NaN,
+            "character_maximum_length": 255.0,
+            "numeric_precision": NaN,
+            "numeric_scale": NaN
+          },
+          {
+            "column_name": "price",
+            "data_type": "numeric",
+            "is_nullable": "NO",
+            "column_default": NaN,
+            "character_maximum_length": NaN,
+            "numeric_precision": 10.0,
+            "numeric_scale": 2.0
+          },
+          {
+            "column_name": "category",
+            "data_type": "character varying",
+            "is_nullable": "YES",
+            "column_default": NaN,
+            "character_maximum_length": 100.0,
+            "numeric_precision": NaN,
+            "numeric_scale": NaN
+          },
+          {
+            "column_name": "created_at",
+            "data_type": "timestamp without time zone",
+            "is_nullable": "YES",
+            "column_default": "CURRENT_TIMESTAMP",
+            "character_maximum_length": NaN,
+            "numeric_precision": NaN,
+            "numeric_scale": NaN
+          }
+        ],
+        "primary_keys": [
+          "product_id"
+        ],
+        "foreign_keys": [],
+        "indexes": [
+          {
+            "index_name": "products_pkey",
+            "column_names": [
+              "product_id"
+            ],
+            "is_unique": true
+          }
+        ],
+        "has_primary_key": true,
+        "has_foreign_keys": false
+      }
+    }
+  },
+  "profiles": {
+    "customers": {
+      "table_name": "customers",
+      "profiled_at": "2026-02-05T14:51:26.492462",
+      "sample_size": 4,
+      "columns": {
+        "customer_id": {
+          "name": "customer_id",
+          "dtype": "int64",
+          "total_count": 4,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 4,
+          "unique_percent": 100.0,
+          "type_category": "numeric",
+          "statistics": {
+            "min": 1.0,
+            "max": 4.0,
+            "mean": 2.5,
+            "median": 2.5,
+            "std": 1.2909944487358056,
+            "q25": 1.75,
+            "q75": 3.25
+          },
+          "outliers": {
+            "method": "iqr",
+            "count": 0,
+            "percent": 0.0,
+            "lower_bound": -2.75,
+            "upper_bound": 7.75
+          },
+          "top_values": [
+            {
+              "value": "1",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "2",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "3",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "4",
+              "count": 1,
+              "percent": 25.0
+            }
+          ]
+        },
+        "email": {
+          "name": "email",
+          "dtype": "str",
+          "total_count": 4,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 4,
+          "unique_percent": 100.0,
+          "type_category": "string",
+          "patterns": {
+            "min_length": 15,
+            "max_length": 22,
+            "avg_length": 17.25,
+            "empty_strings": 0,
+            "has_email_pattern": true,
+            "has_phone_pattern": false,
+            "has_url_pattern": false
+          },
+          "top_values": [
+            {
+              "value": "john@example.com",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "jane@example.com",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "bob@example.com",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "incomplete@example.com",
+              "count": 1,
+              "percent": 25.0
+            }
+          ]
+        },
+        "first_name": {
+          "name": "first_name",
+          "dtype": "str",
+          "total_count": 4,
+          "null_count": 1,
+          "null_percent": 25.0,
+          "unique_count": 3,
+          "unique_percent": 75.0,
+          "type_category": "string",
+          "patterns": {
+            "min_length": 3,
+            "max_length": 4,
+            "avg_length": 3.6666666666666665,
+            "empty_strings": 0,
+            "has_email_pattern": false,
+            "has_phone_pattern": false,
+            "has_url_pattern": false
+          },
+          "top_values": [
+            {
+              "value": "John",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "Jane",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "Bob",
+              "count": 1,
+              "percent": 25.0
+            }
+          ]
+        },
+        "last_name": {
+          "name": "last_name",
+          "dtype": "str",
+          "total_count": 4,
+          "null_count": 1,
+          "null_percent": 25.0,
+          "unique_count": 3,
+          "unique_percent": 75.0,
+          "type_category": "string",
+          "patterns": {
+            "min_length": 3,
+            "max_length": 7,
+            "avg_length": 5.0,
+            "empty_strings": 0,
+            "has_email_pattern": false,
+            "has_phone_pattern": false,
+            "has_url_pattern": false
+          },
+          "top_values": [
+            {
+              "value": "Doe",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "Smith",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "Johnson",
+              "count": 1,
+              "percent": 25.0
+            }
+          ]
+        },
+        "created_at": {
+          "name": "created_at",
+          "dtype": "datetime64[us]",
+          "total_count": 4,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 2,
+          "unique_percent": 50.0,
+          "type_category": "datetime",
+          "temporal": {
+            "min_date": "2026-02-05 14:50:42.279750",
+            "max_date": "2026-02-05 14:50:42.281984",
+            "range_days": 0,
+            "most_recent": "2026-02-05 14:50:42.281984",
+            "oldest": "2026-02-05 14:50:42.279750"
+          },
+          "top_values": [
+            {
+              "value": "2026-02-05 14:50:42.279750",
+              "count": 3,
+              "percent": 75.0
+            },
+            {
+              "value": "2026-02-05 14:50:42.281984",
+              "count": 1,
+              "percent": 25.0
+            }
+          ]
+        }
+      },
+      "completeness_score": 90.0,
+      "data_types": {
+        "numeric": 1,
+        "string": 3,
+        "datetime": 1
+      }
+    },
+    "order_items": {
+      "table_name": "order_items",
+      "profiled_at": "2026-02-05T14:51:26.522636",
+      "sample_size": 4,
+      "columns": {
+        "order_item_id": {
+          "name": "order_item_id",
+          "dtype": "int64",
+          "total_count": 4,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 4,
+          "unique_percent": 100.0,
+          "type_category": "numeric",
+          "statistics": {
+            "min": 1.0,
+            "max": 4.0,
+            "mean": 2.5,
+            "median": 2.5,
+            "std": 1.2909944487358056,
+            "q25": 1.75,
+            "q75": 3.25
+          },
+          "outliers": {
+            "method": "iqr",
+            "count": 0,
+            "percent": 0.0,
+            "lower_bound": -2.75,
+            "upper_bound": 7.75
+          },
+          "top_values": [
+            {
+              "value": "1",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "2",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "3",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "4",
+              "count": 1,
+              "percent": 25.0
+            }
+          ]
+        },
+        "order_id": {
+          "name": "order_id",
+          "dtype": "int64",
+          "total_count": 4,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 3,
+          "unique_percent": 75.0,
+          "type_category": "numeric",
+          "statistics": {
+            "min": 1.0,
+            "max": 3.0,
+            "mean": 1.75,
+            "median": 1.5,
+            "std": 0.9574271077563381,
+            "q25": 1.0,
+            "q75": 2.25
+          },
+          "outliers": {
+            "method": "iqr",
+            "count": 0,
+            "percent": 0.0,
+            "lower_bound": -2.75,
+            "upper_bound": 6.0
+          },
+          "top_values": [
+            {
+              "value": "1",
+              "count": 2,
+              "percent": 50.0
+            },
+            {
+              "value": "2",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "3",
+              "count": 1,
+              "percent": 25.0
+            }
+          ]
+        },
+        "product_id": {
+          "name": "product_id",
+          "dtype": "int64",
+          "total_count": 4,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 2,
+          "unique_percent": 50.0,
+          "type_category": "numeric",
+          "statistics": {
+            "min": 1.0,
+            "max": 2.0,
+            "mean": 1.5,
+            "median": 1.5,
+            "std": 0.5773502691896257,
+            "q25": 1.0,
+            "q75": 2.0
+          },
+          "outliers": {
+            "method": "iqr",
+            "count": 0,
+            "percent": 0.0,
+            "lower_bound": -2.0,
+            "upper_bound": 5.0
+          },
+          "top_values": [
+            {
+              "value": "1",
+              "count": 2,
+              "percent": 50.0
+            },
+            {
+              "value": "2",
+              "count": 2,
+              "percent": 50.0
+            }
+          ]
+        },
+        "quantity": {
+          "name": "quantity",
+          "dtype": "int64",
+          "total_count": 4,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 1,
+          "unique_percent": 25.0,
+          "type_category": "numeric",
+          "statistics": {
+            "min": 1.0,
+            "max": 1.0,
+            "mean": 1.0,
+            "median": 1.0,
+            "std": 0.0,
+            "q25": 1.0,
+            "q75": 1.0
+          },
+          "outliers": {
+            "method": "iqr",
+            "count": 0,
+            "percent": 0.0,
+            "lower_bound": 1.0,
+            "upper_bound": 1.0
+          },
+          "top_values": [
+            {
+              "value": "1",
+              "count": 4,
+              "percent": 100.0
+            }
+          ]
+        },
+        "price": {
+          "name": "price",
+          "dtype": "float64",
+          "total_count": 4,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 2,
+          "unique_percent": 50.0,
+          "type_category": "numeric",
+          "statistics": {
+            "min": 29.99,
+            "max": 49.99,
+            "mean": 39.99,
+            "median": 39.99,
+            "std": 11.547005383792516,
+            "q25": 29.99,
+            "q75": 49.99
+          },
+          "outliers": {
+            "method": "iqr",
+            "count": 0,
+            "percent": 0.0,
+            "lower_bound": -30.010000000000016,
+            "upper_bound": 109.99000000000001
+          },
+          "top_values": [
+            {
+              "value": "29.99",
+              "count": 2,
+              "percent": 50.0
+            },
+            {
+              "value": "49.99",
+              "count": 2,
+              "percent": 50.0
+            }
+          ]
+        }
+      },
+      "completeness_score": 100.0,
+      "data_types": {
+        "numeric": 5
+      }
+    },
+    "orders": {
+      "table_name": "orders",
+      "profiled_at": "2026-02-05T14:51:26.537937",
+      "sample_size": 4,
+      "columns": {
+        "order_id": {
+          "name": "order_id",
+          "dtype": "int64",
+          "total_count": 4,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 4,
+          "unique_percent": 100.0,
+          "type_category": "numeric",
+          "statistics": {
+            "min": 1.0,
+            "max": 4.0,
+            "mean": 2.5,
+            "median": 2.5,
+            "std": 1.2909944487358056,
+            "q25": 1.75,
+            "q75": 3.25
+          },
+          "outliers": {
+            "method": "iqr",
+            "count": 0,
+            "percent": 0.0,
+            "lower_bound": -2.75,
+            "upper_bound": 7.75
+          },
+          "top_values": [
+            {
+              "value": "1",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "2",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "3",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "4",
+              "count": 1,
+              "percent": 25.0
+            }
+          ]
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "dtype": "int64",
+          "total_count": 4,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 2,
+          "unique_percent": 50.0,
+          "type_category": "numeric",
+          "statistics": {
+            "min": 1.0,
+            "max": 2.0,
+            "mean": 1.25,
+            "median": 1.0,
+            "std": 0.5,
+            "q25": 1.0,
+            "q75": 1.25
+          },
+          "outliers": {
+            "method": "iqr",
+            "count": 0,
+            "percent": 0.0,
+            "lower_bound": 0.25,
+            "upper_bound": 2.0
+          },
+          "top_values": [
+            {
+              "value": "1",
+              "count": 3,
+              "percent": 75.0
+            },
+            {
+              "value": "2",
+              "count": 1,
+              "percent": 25.0
+            }
+          ]
+        },
+        "order_total": {
+          "name": "order_total",
+          "dtype": "float64",
+          "total_count": 4,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 3,
+          "unique_percent": 75.0,
+          "type_category": "numeric",
+          "statistics": {
+            "min": 29.99,
+            "max": 79.98,
+            "mean": 59.985,
+            "median": 64.985,
+            "std": 24.489454192910607,
+            "q25": 44.99,
+            "q75": 79.98
+          },
+          "outliers": {
+            "method": "iqr",
+            "count": 0,
+            "percent": 0.0,
+            "lower_bound": -59.98,
+            "upper_bound": 184.95
+          },
+          "top_values": [
+            {
+              "value": "79.98",
+              "count": 2,
+              "percent": 50.0
+            },
+            {
+              "value": "29.99",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "49.99",
+              "count": 1,
+              "percent": 25.0
+            }
+          ]
+        },
+        "order_date": {
+          "name": "order_date",
+          "dtype": "datetime64[us]",
+          "total_count": 4,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 3,
+          "unique_percent": 75.0,
+          "type_category": "datetime",
+          "temporal": {
+            "min_date": "2024-01-15 00:00:00",
+            "max_date": "2024-02-01 00:00:00",
+            "range_days": 17,
+            "most_recent": "2024-02-01 00:00:00",
+            "oldest": "2024-01-15 00:00:00"
+          },
+          "top_values": [
+            {
+              "value": "2024-01-15 00:00:00",
+              "count": 2,
+              "percent": 50.0
+            },
+            {
+              "value": "2024-01-20 00:00:00",
+              "count": 1,
+              "percent": 25.0
+            },
+            {
+              "value": "2024-02-01 00:00:00",
+              "count": 1,
+              "percent": 25.0
+            }
+          ]
+        },
+        "status": {
+          "name": "status",
+          "dtype": "str",
+          "total_count": 4,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 1,
+          "unique_percent": 25.0,
+          "type_category": "string",
+          "patterns": {
+            "min_length": 7,
+            "max_length": 7,
+            "avg_length": 7.0,
+            "empty_strings": 0,
+            "has_email_pattern": false,
+            "has_phone_pattern": false,
+            "has_url_pattern": false
+          },
+          "top_values": [
+            {
+              "value": "pending",
+              "count": 4,
+              "percent": 100.0
+            }
+          ]
+        }
+      },
+      "completeness_score": 100.0,
+      "data_types": {
+        "numeric": 3,
+        "datetime": 1,
+        "string": 1
+      }
+    },
+    "products": {
+      "table_name": "products",
+      "profiled_at": "2026-02-05T14:51:26.545142",
+      "sample_size": 3,
+      "columns": {
+        "product_id": {
+          "name": "product_id",
+          "dtype": "int64",
+          "total_count": 3,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 3,
+          "unique_percent": 100.0,
+          "type_category": "numeric",
+          "statistics": {
+            "min": 1.0,
+            "max": 3.0,
+            "mean": 2.0,
+            "median": 2.0,
+            "std": 1.0,
+            "q25": 1.5,
+            "q75": 2.5
+          },
+          "outliers": {
+            "method": "iqr",
+            "count": 0,
+            "percent": 0.0,
+            "lower_bound": -1.5,
+            "upper_bound": 5.5
+          },
+          "top_values": [
+            {
+              "value": "1",
+              "count": 1,
+              "percent": 33.33333333333333
+            },
+            {
+              "value": "2",
+              "count": 1,
+              "percent": 33.33333333333333
+            },
+            {
+              "value": "3",
+              "count": 1,
+              "percent": 33.33333333333333
+            }
+          ]
+        },
+        "product_name": {
+          "name": "product_name",
+          "dtype": "str",
+          "total_count": 3,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 3,
+          "unique_percent": 100.0,
+          "type_category": "string",
+          "patterns": {
+            "min_length": 8,
+            "max_length": 8,
+            "avg_length": 8.0,
+            "empty_strings": 0,
+            "has_email_pattern": false,
+            "has_phone_pattern": false,
+            "has_url_pattern": false
+          },
+          "top_values": [
+            {
+              "value": "Widget A",
+              "count": 1,
+              "percent": 33.33333333333333
+            },
+            {
+              "value": "Widget B",
+              "count": 1,
+              "percent": 33.33333333333333
+            },
+            {
+              "value": "Gadget X",
+              "count": 1,
+              "percent": 33.33333333333333
+            }
+          ]
+        },
+        "price": {
+          "name": "price",
+          "dtype": "float64",
+          "total_count": 3,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 3,
+          "unique_percent": 100.0,
+          "type_category": "numeric",
+          "statistics": {
+            "min": 19.99,
+            "max": 49.99,
+            "mean": 33.32333333333333,
+            "median": 29.99,
+            "std": 15.275252316519468,
+            "q25": 24.99,
+            "q75": 39.99
+          },
+          "outliers": {
+            "method": "iqr",
+            "count": 0,
+            "percent": 0.0,
+            "lower_bound": -20.010000000000016,
+            "upper_bound": 84.99000000000001
+          },
+          "top_values": [
+            {
+              "value": "29.99",
+              "count": 1,
+              "percent": 33.33333333333333
+            },
+            {
+              "value": "49.99",
+              "count": 1,
+              "percent": 33.33333333333333
+            },
+            {
+              "value": "19.99",
+              "count": 1,
+              "percent": 33.33333333333333
+            }
+          ]
+        },
+        "category": {
+          "name": "category",
+          "dtype": "str",
+          "total_count": 3,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 2,
+          "unique_percent": 66.66666666666666,
+          "type_category": "string",
+          "patterns": {
+            "min_length": 11,
+            "max_length": 11,
+            "avg_length": 11.0,
+            "empty_strings": 0,
+            "has_email_pattern": false,
+            "has_phone_pattern": false,
+            "has_url_pattern": false
+          },
+          "top_values": [
+            {
+              "value": "Electronics",
+              "count": 2,
+              "percent": 66.66666666666666
+            },
+            {
+              "value": "Accessories",
+              "count": 1,
+              "percent": 33.33333333333333
+            }
+          ]
+        },
+        "created_at": {
+          "name": "created_at",
+          "dtype": "datetime64[us]",
+          "total_count": 3,
+          "null_count": 0,
+          "null_percent": 0.0,
+          "unique_count": 1,
+          "unique_percent": 33.33333333333333,
+          "type_category": "datetime",
+          "temporal": {
+            "min_date": "2026-02-05 14:50:42.280323",
+            "max_date": "2026-02-05 14:50:42.280323",
+            "range_days": 0,
+            "most_recent": "2026-02-05 14:50:42.280323",
+            "oldest": "2026-02-05 14:50:42.280323"
+          },
+          "top_values": [
+            {
+              "value": "2026-02-05 14:50:42.280323",
+              "count": 3,
+              "percent": 100.0
+            }
+          ]
+        }
+      },
+      "completeness_score": 100.0,
+      "data_types": {
+        "numeric": 2,
+        "string": 2,
+        "datetime": 1
+      }
+    }
+  },
+  "quality": {
+    "customers": {
+      "table_name": "customers",
+      "checked_at": "2026-02-05T14:51:26.514664",
+      "checks": [
+        {
+          "check_name": "completeness",
+          "status": "pass",
+          "message": "All columns have acceptable completeness",
+          "severity": "low"
+        },
+        {
+          "check_name": "freshness",
+          "status": "pass",
+          "message": "Data is recent (0 days old)",
+          "details": {
+            "column": "created_at",
+            "days_old": 0
+          },
+          "severity": "low"
+        },
+        {
+          "check_name": "duplicates",
+          "status": "pass",
+          "message": "Low duplicate rate",
+          "details": {
+            "duplicate_count": 0,
+            "candidate_keys": [
+              "customer_id",
+              "email"
+            ]
+          },
+          "severity": "low"
+        },
+        {
+          "check_name": "consistency",
+          "status": "pass",
+          "message": "No consistency issues detected",
+          "severity": "low"
+        }
+      ],
+      "quality_score": 100.0,
+      "severity_summary": {
+        "low": 4,
+        "medium": 0,
+        "high": 0
+      },
+      "completeness_score": 90.0
+    },
+    "order_items": {
+      "table_name": "order_items",
+      "checked_at": "2026-02-05T14:51:26.531980",
+      "checks": [
+        {
+          "check_name": "completeness",
+          "status": "pass",
+          "message": "All columns have acceptable completeness",
+          "severity": "low"
+        },
+        {
+          "check_name": "duplicates",
+          "status": "pass",
+          "message": "Low duplicate rate",
+          "details": {
+            "duplicate_count": 0,
+            "candidate_keys": [
+              "order_item_id"
+            ]
+          },
+          "severity": "low"
+        },
+        {
+          "check_name": "consistency",
+          "status": "pass",
+          "message": "No consistency issues detected",
+          "severity": "low"
+        }
+      ],
+      "quality_score": 100.0,
+      "severity_summary": {
+        "low": 3,
+        "medium": 0,
+        "high": 0
+      },
+      "completeness_score": 100.0
+    },
+    "orders": {
+      "table_name": "orders",
+      "checked_at": "2026-02-05T14:51:26.542142",
+      "checks": [
+        {
+          "check_name": "completeness",
+          "status": "pass",
+          "message": "All columns have acceptable completeness",
+          "severity": "low"
+        },
+        {
+          "check_name": "freshness",
+          "status": "warning",
+          "message": "Data is 735 days old (column: order_date)",
+          "details": {
+            "column": "order_date",
+            "latest_date": "2024-02-01 00:00:00",
+            "days_old": 735
+          },
+          "severity": "high"
+        },
+        {
+          "check_name": "duplicates",
+          "status": "pass",
+          "message": "Low duplicate rate",
+          "details": {
+            "duplicate_count": 0,
+            "candidate_keys": [
+              "order_id"
+            ]
+          },
+          "severity": "low"
+        },
+        {
+          "check_name": "consistency",
+          "status": "pass",
+          "message": "No consistency issues detected",
+          "severity": "low"
+        }
+      ],
+      "quality_score": 87.5,
+      "severity_summary": {
+        "low": 3,
+        "medium": 0,
+        "high": 1
+      },
+      "completeness_score": 100.0
+    },
+    "products": {
+      "table_name": "products",
+      "checked_at": "2026-02-05T14:51:26.548604",
+      "checks": [
+        {
+          "check_name": "completeness",
+          "status": "pass",
+          "message": "All columns have acceptable completeness",
+          "severity": "low"
+        },
+        {
+          "check_name": "freshness",
+          "status": "pass",
+          "message": "Data is recent (0 days old)",
+          "details": {
+            "column": "created_at",
+            "days_old": 0
+          },
+          "severity": "low"
+        },
+        {
+          "check_name": "duplicates",
+          "status": "pass",
+          "message": "Low duplicate rate",
+          "details": {
+            "duplicate_count": 0,
+            "candidate_keys": [
+              "product_id",
+              "product_name",
+              "price"
+            ]
+          },
+          "severity": "low"
+        },
+        {
+          "check_name": "consistency",
+          "status": "pass",
+          "message": "No consistency issues detected",
+          "severity": "low"
+        }
+      ],
+      "quality_score": 100.0,
+      "severity_summary": {
+        "low": 4,
+        "medium": 0,
+        "high": 0
+      },
+      "completeness_score": 100.0
+    }
+  },
+  "pii": {
+    "summary": {
+      "has_pii": true,
+      "tables_with_pii": 3,
+      "total_pii_columns": 6,
+      "risk_score": "medium",
+      "by_table": {
+        "customers": {
+          "table_name": "customers",
+          "has_pii": true,
+          "pii_column_count": 4,
+          "risk_score": "medium",
+          "pii_columns": [
+            {
+              "column": "customer_id",
+              "sensitivity": "low",
+              "detection_method": "column_name",
+              "pattern_match": {},
+              "recommendation": "Standard: Apply basic access controls, consider anonymization for analytics"
+            },
+            {
+              "column": "email",
+              "sensitivity": "medium",
+              "detection_method": "column_name",
+              "pattern_match": {
+                "email": true
+              },
+              "recommendation": "Important: Consider encryption, implement access controls, log access"
+            },
+            {
+              "column": "first_name",
+              "sensitivity": "medium",
+              "detection_method": "column_name",
+              "pattern_match": {},
+              "recommendation": "Important: Consider encryption, implement access controls, log access"
+            },
+            {
+              "column": "last_name",
+              "sensitivity": "medium",
+              "detection_method": "column_name",
+              "pattern_match": {},
+              "recommendation": "Important: Consider encryption, implement access controls, log access"
+            }
+          ],
+          "compliance_notes": [
+            "Ensure 'Right to Erasure' (GDPR Article 17) can be honored",
+            "Implement access controls and audit logging for PII access"
+          ]
+        },
+        "order_items": {
+          "table_name": "order_items",
+          "has_pii": false,
+          "pii_column_count": 0,
+          "risk_score": "none",
+          "pii_columns": [],
+          "compliance_notes": [
+            "No PII detected - standard data protection practices apply"
+          ]
+        },
+        "orders": {
+          "table_name": "orders",
+          "has_pii": true,
+          "pii_column_count": 1,
+          "risk_score": "low",
+          "pii_columns": [
+            {
+              "column": "customer_id",
+              "sensitivity": "low",
+              "detection_method": "column_name",
+              "pattern_match": {},
+              "recommendation": "Standard: Apply basic access controls, consider anonymization for analytics"
+            }
+          ],
+          "compliance_notes": [
+            "Ensure 'Right to Erasure' (GDPR Article 17) can be honored",
+            "Implement access controls and audit logging for PII access"
+          ]
+        },
+        "products": {
+          "table_name": "products",
+          "has_pii": true,
+          "pii_column_count": 1,
+          "risk_score": "low",
+          "pii_columns": [
+            {
+              "column": "product_name",
+              "sensitivity": "low",
+              "detection_method": "column_name",
+              "pattern_match": {},
+              "recommendation": "Standard: Apply basic access controls, consider anonymization for analytics"
+            }
+          ],
+          "compliance_notes": [
+            "Ensure 'Right to Erasure' (GDPR Article 17) can be honored",
+            "Implement access controls and audit logging for PII access"
+          ]
+        }
+      }
+    },
+    "by_table": {
+      "customers": {
+        "table_name": "customers",
+        "has_pii": true,
+        "pii_column_count": 4,
+        "risk_score": "medium",
+        "pii_columns": [
+          {
+            "column": "customer_id",
+            "sensitivity": "low",
+            "detection_method": "column_name",
+            "pattern_match": {},
+            "recommendation": "Standard: Apply basic access controls, consider anonymization for analytics"
+          },
+          {
+            "column": "email",
+            "sensitivity": "medium",
+            "detection_method": "column_name",
+            "pattern_match": {
+              "email": true
+            },
+            "recommendation": "Important: Consider encryption, implement access controls, log access"
+          },
+          {
+            "column": "first_name",
+            "sensitivity": "medium",
+            "detection_method": "column_name",
+            "pattern_match": {},
+            "recommendation": "Important: Consider encryption, implement access controls, log access"
+          },
+          {
+            "column": "last_name",
+            "sensitivity": "medium",
+            "detection_method": "column_name",
+            "pattern_match": {},
+            "recommendation": "Important: Consider encryption, implement access controls, log access"
+          }
+        ],
+        "compliance_notes": [
+          "Ensure 'Right to Erasure' (GDPR Article 17) can be honored",
+          "Implement access controls and audit logging for PII access"
+        ]
+      },
+      "order_items": {
+        "table_name": "order_items",
+        "has_pii": false,
+        "pii_column_count": 0,
+        "risk_score": "none",
+        "pii_columns": [],
+        "compliance_notes": [
+          "No PII detected - standard data protection practices apply"
+        ]
+      },
+      "orders": {
+        "table_name": "orders",
+        "has_pii": true,
+        "pii_column_count": 1,
+        "risk_score": "low",
+        "pii_columns": [
+          {
+            "column": "customer_id",
+            "sensitivity": "low",
+            "detection_method": "column_name",
+            "pattern_match": {},
+            "recommendation": "Standard: Apply basic access controls, consider anonymization for analytics"
+          }
+        ],
+        "compliance_notes": [
+          "Ensure 'Right to Erasure' (GDPR Article 17) can be honored",
+          "Implement access controls and audit logging for PII access"
+        ]
+      },
+      "products": {
+        "table_name": "products",
+        "has_pii": true,
+        "pii_column_count": 1,
+        "risk_score": "low",
+        "pii_columns": [
+          {
+            "column": "product_name",
+            "sensitivity": "low",
+            "detection_method": "column_name",
+            "pattern_match": {},
+            "recommendation": "Standard: Apply basic access controls, consider anonymization for analytics"
+          }
+        ],
+        "compliance_notes": [
+          "Ensure 'Right to Erasure' (GDPR Article 17) can be honored",
+          "Implement access controls and audit logging for PII access"
+        ]
+      }
+    }
+  },
+  "relationships": {
+    "inferred_at": "2026-02-05T14:51:26.556550",
+    "tables_analyzed": 4,
+    "relationships": [
+      {
+        "table1": "customers",
+        "table2": "orders",
+        "column": "customer_id",
+        "data_type": "integer",
+        "cardinality": "many-to-one",
+        "confidence": "high",
+        "join_type": "inner"
+      },
+      {
+        "table1": "order_items",
+        "table2": "orders",
+        "column": "order_id",
+        "data_type": "integer",
+        "cardinality": "one-to-many",
+        "confidence": "high",
+        "join_type": "inner"
+      },
+      {
+        "table1": "order_items",
+        "table2": "products",
+        "column": "product_id",
+        "data_type": "integer",
+        "cardinality": "one-to-many",
+        "confidence": "high",
+        "join_type": "inner"
+      }
+    ],
+    "candidate_primary_keys": {
+      "customers": [
+        {
+          "column": "customer_id",
+          "confidence": "high",
+          "reason": "100% unique, no nulls"
+        },
+        {
+          "column": "email",
+          "confidence": "high",
+          "reason": "100% unique, no nulls"
+        }
+      ],
+      "order_items": [
+        {
+          "column": "order_item_id",
+          "confidence": "high",
+          "reason": "100% unique, no nulls"
+        }
+      ],
+      "orders": [
+        {
+          "column": "order_id",
+          "confidence": "high",
+          "reason": "100% unique, no nulls"
+        }
+      ],
+      "products": [
+        {
+          "column": "product_id",
+          "confidence": "high",
+          "reason": "100% unique, no nulls"
+        },
+        {
+          "column": "product_name",
+          "confidence": "high",
+          "reason": "100% unique, no nulls"
+        },
+        {
+          "column": "price",
+          "confidence": "high",
+          "reason": "100% unique, no nulls"
+        }
+      ]
+    },
+    "join_paths": [
+      {
+        "start": "customers",
+        "middle": "orders",
+        "end": "order_items",
+        "hops": 2,
+        "confidence": "high"
+      },
+      {
+        "start": "orders",
+        "middle": "order_items",
+        "end": "products",
+        "hops": 2,
+        "confidence": "high"
+      },
+      {
+        "start": "order_items",
+        "middle": "orders",
+        "end": "customers",
+        "hops": 2,
+        "confidence": "high"
+      },
+      {
+        "start": "products",
+        "middle": "order_items",
+        "end": "orders",
+        "hops": 2,
+        "confidence": "high"
+      }
+    ]
+  },
+  "industry": {
+    "industry": "ecommerce",
+    "confidence": 1.0,
+    "method": "specified"
+  },
+  "kpis": [
+    {
+      "name": "Average Order Value (AOV)",
+      "category": "Revenue",
+      "priority": 1,
+      "description": "Average revenue per order",
+      "required_tables": [
+        "orders"
+      ],
+      "required_columns": [
+        "order_total",
+        "order_id"
+      ],
+      "sql_template": "SELECT \n  AVG(order_total) as aov,\n  DATE_TRUNC('month', order_date) as month\nFROM orders\nWHERE order_date >= CURRENT_DATE - INTERVAL '12 months'\nGROUP BY month\nORDER BY month DESC\n",
+      "data_readiness_checks": [
+        {
+          "order_total": "not_null"
+        },
+        {
+          "order_date": "not_null"
+        }
+      ],
+      "readiness": {
+        "is_ready": true,
+        "missing_tables": [],
+        "status": "green"
+      },
+      "industry": "ecommerce",
+      "status": "ready"
+    },
+    {
+      "name": "Customer Lifetime Value (LTV)",
+      "category": "Revenue",
+      "priority": 2,
+      "description": "Total revenue generated per customer over their lifetime",
+      "required_tables": [
+        "orders",
+        "customers"
+      ],
+      "required_columns": [
+        "customer_id",
+        "order_total"
+      ],
+      "sql_template": "SELECT \n  customer_id,\n  SUM(order_total) as lifetime_value,\n  COUNT(order_id) as order_count\nFROM orders\nGROUP BY customer_id\nORDER BY lifetime_value DESC\nLIMIT 100\n",
+      "readiness": {
+        "is_ready": true,
+        "missing_tables": [],
+        "status": "green"
+      },
+      "industry": "ecommerce",
+      "status": "ready"
+    }
+  ]
+}

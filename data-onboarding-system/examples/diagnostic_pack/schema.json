@@ -1,0 +1,299 @@
+{
+  "extracted_at": "2026-02-05T14:51:26.396063",
+  "schema_name": "public",
+  "table_count": 4,
+  "tables": {
+    "customers": {
+      "row_count": 4,
+      "size_category": "small",
+      "column_count": 5,
+      "columns": [
+        {
+          "column_name": "customer_id",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": "nextval('customers_customer_id_seq'::regclass)",
+          "character_maximum_length": NaN,
+          "numeric_precision": 32.0,
+          "numeric_scale": 0.0
+        },
+        {
+          "column_name": "email",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": NaN,
+          "character_maximum_length": 255.0,
+          "numeric_precision": NaN,
+          "numeric_scale": NaN
+        },
+        {
+          "column_name": "first_name",
+          "data_type": "character varying",
+          "is_nullable": "YES",
+          "column_default": NaN,
+          "character_maximum_length": 100.0,
+          "numeric_precision": NaN,
+          "numeric_scale": NaN
+        },
+        {
+          "column_name": "last_name",
+          "data_type": "character varying",
+          "is_nullable": "YES",
+          "column_default": NaN,
+          "character_maximum_length": 100.0,
+          "numeric_precision": NaN,
+          "numeric_scale": NaN
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp without time zone",
+          "is_nullable": "YES",
+          "column_default": "CURRENT_TIMESTAMP",
+          "character_maximum_length": NaN,
+          "numeric_precision": NaN,
+          "numeric_scale": NaN
+        }
+      ],
+      "primary_keys": [
+        "customer_id"
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "index_name": "customers_email_key",
+          "column_names": [
+            "email"
+          ],
+          "is_unique": true
+        },
+        {
+          "index_name": "customers_pkey",
+          "column_names": [
+            "customer_id"
+          ],
+          "is_unique": true
+        }
+      ],
+      "has_primary_key": true,
+      "has_foreign_keys": false
+    },
+    "order_items": {
+      "row_count": 4,
+      "size_category": "small",
+      "column_count": 5,
+      "columns": [
+        {
+          "column_name": "order_item_id",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": "nextval('order_items_order_item_id_seq'::regclass)",
+          "character_maximum_length": null,
+          "numeric_precision": 32,
+          "numeric_scale": 0
+        },
+        {
+          "column_name": "order_id",
+          "data_type": "integer",
+          "is_nullable": "YES",
+          "column_default": NaN,
+          "character_maximum_length": null,
+          "numeric_precision": 32,
+          "numeric_scale": 0
+        },
+        {
+          "column_name": "product_id",
+          "data_type": "integer",
+          "is_nullable": "YES",
+          "column_default": NaN,
+          "character_maximum_length": null,
+          "numeric_precision": 32,
+          "numeric_scale": 0
+        },
+        {
+          "column_name": "quantity",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": NaN,
+          "character_maximum_length": null,
+          "numeric_precision": 32,
+          "numeric_scale": 0
+        },
+        {
+          "column_name": "price",
+          "data_type": "numeric",
+          "is_nullable": "NO",
+          "column_default": NaN,
+          "character_maximum_length": null,
+          "numeric_precision": 10,
+          "numeric_scale": 2
+        }
+      ],
+      "primary_keys": [
+        "order_item_id"
+      ],
+      "foreign_keys": [
+        {
+          "column_name": "order_id",
+          "foreign_table": "orders",
+          "foreign_column": "order_id"
+        },
+        {
+          "column_name": "product_id",
+          "foreign_table": "products",
+          "foreign_column": "product_id"
+        }
+      ],
+      "indexes": [
+        {
+          "index_name": "order_items_pkey",
+          "column_names": [
+            "order_item_id"
+          ],
+          "is_unique": true
+        }
+      ],
+      "has_primary_key": true,
+      "has_foreign_keys": true
+    },
+    "orders": {
+      "row_count": 4,
+      "size_category": "small",
+      "column_count": 5,
+      "columns": [
+        {
+          "column_name": "order_id",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": "nextval('orders_order_id_seq'::regclass)",
+          "character_maximum_length": NaN,
+          "numeric_precision": 32.0,
+          "numeric_scale": 0.0
+        },
+        {
+          "column_name": "customer_id",
+          "data_type": "integer",
+          "is_nullable": "YES",
+          "column_default": NaN,
+          "character_maximum_length": NaN,
+          "numeric_precision": 32.0,
+          "numeric_scale": 0.0
+        },
+        {
+          "column_name": "order_total",
+          "data_type": "numeric",
+          "is_nullable": "NO",
+          "column_default": NaN,
+          "character_maximum_length": NaN,
+          "numeric_precision": 10.0,
+          "numeric_scale": 2.0
+        },
+        {
+          "column_name": "order_date",
+          "data_type": "timestamp without time zone",
+          "is_nullable": "YES",
+          "column_default": "CURRENT_TIMESTAMP",
+          "character_maximum_length": NaN,
+          "numeric_precision": NaN,
+          "numeric_scale": NaN
+        },
+        {
+          "column_name": "status",
+          "data_type": "character varying",
+          "is_nullable": "YES",
+          "column_default": "'pending'::character varying",
+          "character_maximum_length": 50.0,
+          "numeric_precision": NaN,
+          "numeric_scale": NaN
+        }
+      ],
+      "primary_keys": [
+        "order_id"
+      ],
+      "foreign_keys": [
+        {
+          "column_name": "customer_id",
+          "foreign_table": "customers",
+          "foreign_column": "customer_id"
+        }
+      ],
+      "indexes": [
+        {
+          "index_name": "orders_pkey",
+          "column_names": [
+            "order_id"
+          ],
+          "is_unique": true
+        }
+      ],
+      "has_primary_key": true,
+      "has_foreign_keys": true
+    },
+    "products": {
+      "row_count": 3,
+      "size_category": "small",
+      "column_count": 5,
+      "columns": [
+        {
+          "column_name": "product_id",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": "nextval('products_product_id_seq'::regclass)",
+          "character_maximum_length": NaN,
+          "numeric_precision": 32.0,
+          "numeric_scale": 0.0
+        },
+        {
+          "column_name": "product_name",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": NaN,
+          "character_maximum_length": 255.0,
+          "numeric_precision": NaN,
+          "numeric_scale": NaN
+        },
+        {
+          "column_name": "price",
+          "data_type": "numeric",
+          "is_nullable": "NO",
+          "column_default": NaN,
+          "character_maximum_length": NaN,
+          "numeric_precision": 10.0,
+          "numeric_scale": 2.0
+        },
+        {
+          "column_name": "category",
+          "data_type": "character varying",
+          "is_nullable": "YES",
+          "column_default": NaN,
+          "character_maximum_length": 100.0,
+          "numeric_precision": NaN,
+          "numeric_scale": NaN
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp without time zone",
+          "is_nullable": "YES",
+          "column_default": "CURRENT_TIMESTAMP",
+          "character_maximum_length": NaN,
+          "numeric_precision": NaN,
+          "numeric_scale": NaN
+        }
+      ],
+      "primary_keys": [
+        "product_id"
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "index_name": "products_pkey",
+          "column_names": [
+            "product_id"
+          ],
+          "is_unique": true
+        }
+      ],
+      "has_primary_key": true,
+      "has_foreign_keys": false
+    }
+  }
+}

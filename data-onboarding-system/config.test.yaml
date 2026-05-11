@@ -1,0 +1,56 @@
+# Test configuration for E2E pipeline testing
+
+spec_version: "1.0.0"
+
+client:
+  id: "test_001"
+  name: "Test E-commerce Company"
+  industry: "ecommerce"
+
+connection:
+  type: "postgresql"
+  host: "${DB_HOST:-localhost}"
+  port: "${DB_PORT:-5433}"
+  database: "${DB_NAME:-testdb}"
+  username: "${DB_USER:-testuser}"
+  password: "${DB_PASSWORD:-testpass}"
+  read_only: false
+
+sampling:
+  enabled: true
+  small_table_threshold: 100000
+  medium_sample_rate: 0.10
+  large_sample_rate: 0.05
+  max_sample_size: 1000000
+
+analysis:
+  schema_discovery: true
+  data_profiling: true
+  quality_checks: true
+  pii_detection: true
+  relationship_inference: true
+  kpi_suggestions: true
+
+kpi:
+  auto_detect_industry: true
+  confidence_threshold: 0.6
+  generate_sql_examples: true
+  max_recommendations: 7
+
+reporting:
+  format: ["html", "pdf", "json"]
+  include_charts: true
+  include_raw_stats: true
+
+output:
+  directory: "./test_reports"
+  retention_days: 90
+
+pipeline:
+  require_human_qa: false
+  timeout_hours: 2
+  fail_on_partial: false
+
+logging:
+  level: "INFO"
+  file: "./logs/test_pipeline.log"

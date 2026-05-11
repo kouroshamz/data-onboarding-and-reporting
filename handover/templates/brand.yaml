@@ -1,0 +1,24 @@
+spec_version: "1.0.0"
+company_name: "Client Inc"
+logo:
+  light: "assets/logo_light.svg"
+  dark: "assets/logo_dark.svg"
+font:
+  family: "IBM Plex Sans"
+  heading_weight: 600
+  body_weight: 400
+palette:
+  primary: "#0057D9"
+  secondary: "#00A88E"
+  accent: "#F59E0B"
+  neutral_bg: "#F8FAFC"
+  neutral_surface: "#FFFFFF"
+  neutral_text: "#0F172A"
+semantic:
+  success: "#15803D"
+  warning: "#B45309"
+  danger: "#B91C1C"
+  info: "#1D4ED8"
+forbidden_colors:
+  - "#8000FF"
+  - "#A020F0"

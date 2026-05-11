@@ -1,0 +1,808 @@
+{
+  "customers": {
+    "table_name": "customers",
+    "profiled_at": "2026-02-05T14:51:26.492462",
+    "sample_size": 4,
+    "columns": {
+      "customer_id": {
+        "name": "customer_id",
+        "dtype": "int64",
+        "total_count": 4,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 4,
+        "unique_percent": 100.0,
+        "type_category": "numeric",
+        "statistics": {
+          "min": 1.0,
+          "max": 4.0,
+          "mean": 2.5,
+          "median": 2.5,
+          "std": 1.2909944487358056,
+          "q25": 1.75,
+          "q75": 3.25
+        },
+        "outliers": {
+          "method": "iqr",
+          "count": 0,
+          "percent": 0.0,
+          "lower_bound": -2.75,
+          "upper_bound": 7.75
+        },
+        "top_values": [
+          {
+            "value": "1",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "2",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "3",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "4",
+            "count": 1,
+            "percent": 25.0
+          }
+        ]
+      },
+      "email": {
+        "name": "email",
+        "dtype": "str",
+        "total_count": 4,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 4,
+        "unique_percent": 100.0,
+        "type_category": "string",
+        "patterns": {
+          "min_length": 15,
+          "max_length": 22,
+          "avg_length": 17.25,
+          "empty_strings": 0,
+          "has_email_pattern": true,
+          "has_phone_pattern": false,
+          "has_url_pattern": false
+        },
+        "top_values": [
+          {
+            "value": "john@example.com",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "jane@example.com",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "bob@example.com",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "incomplete@example.com",
+            "count": 1,
+            "percent": 25.0
+          }
+        ]
+      },
+      "first_name": {
+        "name": "first_name",
+        "dtype": "str",
+        "total_count": 4,
+        "null_count": 1,
+        "null_percent": 25.0,
+        "unique_count": 3,
+        "unique_percent": 75.0,
+        "type_category": "string",
+        "patterns": {
+          "min_length": 3,
+          "max_length": 4,
+          "avg_length": 3.6666666666666665,
+          "empty_strings": 0,
+          "has_email_pattern": false,
+          "has_phone_pattern": false,
+          "has_url_pattern": false
+        },
+        "top_values": [
+          {
+            "value": "John",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "Jane",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "Bob",
+            "count": 1,
+            "percent": 25.0
+          }
+        ]
+      },
+      "last_name": {
+        "name": "last_name",
+        "dtype": "str",
+        "total_count": 4,
+        "null_count": 1,
+        "null_percent": 25.0,
+        "unique_count": 3,
+        "unique_percent": 75.0,
+        "type_category": "string",
+        "patterns": {
+          "min_length": 3,
+          "max_length": 7,
+          "avg_length": 5.0,
+          "empty_strings": 0,
+          "has_email_pattern": false,
+          "has_phone_pattern": false,
+          "has_url_pattern": false
+        },
+        "top_values": [
+          {
+            "value": "Doe",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "Smith",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "Johnson",
+            "count": 1,
+            "percent": 25.0
+          }
+        ]
+      },
+      "created_at": {
+        "name": "created_at",
+        "dtype": "datetime64[us]",
+        "total_count": 4,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 2,
+        "unique_percent": 50.0,
+        "type_category": "datetime",
+        "temporal": {
+          "min_date": "2026-02-05 14:50:42.279750",
+          "max_date": "2026-02-05 14:50:42.281984",
+          "range_days": 0,
+          "most_recent": "2026-02-05 14:50:42.281984",
+          "oldest": "2026-02-05 14:50:42.279750"
+        },
+        "top_values": [
+          {
+            "value": "2026-02-05 14:50:42.279750",
+            "count": 3,
+            "percent": 75.0
+          },
+          {
+            "value": "2026-02-05 14:50:42.281984",
+            "count": 1,
+            "percent": 25.0
+          }
+        ]
+      }
+    },
+    "completeness_score": 90.0,
+    "data_types": {
+      "numeric": 1,
+      "string": 3,
+      "datetime": 1
+    }
+  },
+  "order_items": {
+    "table_name": "order_items",
+    "profiled_at": "2026-02-05T14:51:26.522636",
+    "sample_size": 4,
+    "columns": {
+      "order_item_id": {
+        "name": "order_item_id",
+        "dtype": "int64",
+        "total_count": 4,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 4,
+        "unique_percent": 100.0,
+        "type_category": "numeric",
+        "statistics": {
+          "min": 1.0,
+          "max": 4.0,
+          "mean": 2.5,
+          "median": 2.5,
+          "std": 1.2909944487358056,
+          "q25": 1.75,
+          "q75": 3.25
+        },
+        "outliers": {
+          "method": "iqr",
+          "count": 0,
+          "percent": 0.0,
+          "lower_bound": -2.75,
+          "upper_bound": 7.75
+        },
+        "top_values": [
+          {
+            "value": "1",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "2",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "3",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "4",
+            "count": 1,
+            "percent": 25.0
+          }
+        ]
+      },
+      "order_id": {
+        "name": "order_id",
+        "dtype": "int64",
+        "total_count": 4,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 3,
+        "unique_percent": 75.0,
+        "type_category": "numeric",
+        "statistics": {
+          "min": 1.0,
+          "max": 3.0,
+          "mean": 1.75,
+          "median": 1.5,
+          "std": 0.9574271077563381,
+          "q25": 1.0,
+          "q75": 2.25
+        },
+        "outliers": {
+          "method": "iqr",
+          "count": 0,
+          "percent": 0.0,
+          "lower_bound": -2.75,
+          "upper_bound": 6.0
+        },
+        "top_values": [
+          {
+            "value": "1",
+            "count": 2,
+            "percent": 50.0
+          },
+          {
+            "value": "2",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "3",
+            "count": 1,
+            "percent": 25.0
+          }
+        ]
+      },
+      "product_id": {
+        "name": "product_id",
+        "dtype": "int64",
+        "total_count": 4,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 2,
+        "unique_percent": 50.0,
+        "type_category": "numeric",
+        "statistics": {
+          "min": 1.0,
+          "max": 2.0,
+          "mean": 1.5,
+          "median": 1.5,
+          "std": 0.5773502691896257,
+          "q25": 1.0,
+          "q75": 2.0
+        },
+        "outliers": {
+          "method": "iqr",
+          "count": 0,
+          "percent": 0.0,
+          "lower_bound": -2.0,
+          "upper_bound": 5.0
+        },
+        "top_values": [
+          {
+            "value": "1",
+            "count": 2,
+            "percent": 50.0
+          },
+          {
+            "value": "2",
+            "count": 2,
+            "percent": 50.0
+          }
+        ]
+      },
+      "quantity": {
+        "name": "quantity",
+        "dtype": "int64",
+        "total_count": 4,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 1,
+        "unique_percent": 25.0,
+        "type_category": "numeric",
+        "statistics": {
+          "min": 1.0,
+          "max": 1.0,
+          "mean": 1.0,
+          "median": 1.0,
+          "std": 0.0,
+          "q25": 1.0,
+          "q75": 1.0
+        },
+        "outliers": {
+          "method": "iqr",
+          "count": 0,
+          "percent": 0.0,
+          "lower_bound": 1.0,
+          "upper_bound": 1.0
+        },
+        "top_values": [
+          {
+            "value": "1",
+            "count": 4,
+            "percent": 100.0
+          }
+        ]
+      },
+      "price": {
+        "name": "price",
+        "dtype": "float64",
+        "total_count": 4,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 2,
+        "unique_percent": 50.0,
+        "type_category": "numeric",
+        "statistics": {
+          "min": 29.99,
+          "max": 49.99,
+          "mean": 39.99,
+          "median": 39.99,
+          "std": 11.547005383792516,
+          "q25": 29.99,
+          "q75": 49.99
+        },
+        "outliers": {
+          "method": "iqr",
+          "count": 0,
+          "percent": 0.0,
+          "lower_bound": -30.010000000000016,
+          "upper_bound": 109.99000000000001
+        },
+        "top_values": [
+          {
+            "value": "29.99",
+            "count": 2,
+            "percent": 50.0
+          },
+          {
+            "value": "49.99",
+            "count": 2,
+            "percent": 50.0
+          }
+        ]
+      }
+    },
+    "completeness_score": 100.0,
+    "data_types": {
+      "numeric": 5
+    }
+  },
+  "orders": {
+    "table_name": "orders",
+    "profiled_at": "2026-02-05T14:51:26.537937",
+    "sample_size": 4,
+    "columns": {
+      "order_id": {
+        "name": "order_id",
+        "dtype": "int64",
+        "total_count": 4,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 4,
+        "unique_percent": 100.0,
+        "type_category": "numeric",
+        "statistics": {
+          "min": 1.0,
+          "max": 4.0,
+          "mean": 2.5,
+          "median": 2.5,
+          "std": 1.2909944487358056,
+          "q25": 1.75,
+          "q75": 3.25
+        },
+        "outliers": {
+          "method": "iqr",
+          "count": 0,
+          "percent": 0.0,
+          "lower_bound": -2.75,
+          "upper_bound": 7.75
+        },
+        "top_values": [
+          {
+            "value": "1",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "2",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "3",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "4",
+            "count": 1,
+            "percent": 25.0
+          }
+        ]
+      },
+      "customer_id": {
+        "name": "customer_id",
+        "dtype": "int64",
+        "total_count": 4,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 2,
+        "unique_percent": 50.0,
+        "type_category": "numeric",
+        "statistics": {
+          "min": 1.0,
+          "max": 2.0,
+          "mean": 1.25,
+          "median": 1.0,
+          "std": 0.5,
+          "q25": 1.0,
+          "q75": 1.25
+        },
+        "outliers": {
+          "method": "iqr",
+          "count": 0,
+          "percent": 0.0,
+          "lower_bound": 0.25,
+          "upper_bound": 2.0
+        },
+        "top_values": [
+          {
+            "value": "1",
+            "count": 3,
+            "percent": 75.0
+          },
+          {
+            "value": "2",
+            "count": 1,
+            "percent": 25.0
+          }
+        ]
+      },
+      "order_total": {
+        "name": "order_total",
+        "dtype": "float64",
+        "total_count": 4,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 3,
+        "unique_percent": 75.0,
+        "type_category": "numeric",
+        "statistics": {
+          "min": 29.99,
+          "max": 79.98,
+          "mean": 59.985,
+          "median": 64.985,
+          "std": 24.489454192910607,
+          "q25": 44.99,
+          "q75": 79.98
+        },
+        "outliers": {
+          "method": "iqr",
+          "count": 0,
+          "percent": 0.0,
+          "lower_bound": -59.98,
+          "upper_bound": 184.95
+        },
+        "top_values": [
+          {
+            "value": "79.98",
+            "count": 2,
+            "percent": 50.0
+          },
+          {
+            "value": "29.99",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "49.99",
+            "count": 1,
+            "percent": 25.0
+          }
+        ]
+      },
+      "order_date": {
+        "name": "order_date",
+        "dtype": "datetime64[us]",
+        "total_count": 4,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 3,
+        "unique_percent": 75.0,
+        "type_category": "datetime",
+        "temporal": {
+          "min_date": "2024-01-15 00:00:00",
+          "max_date": "2024-02-01 00:00:00",
+          "range_days": 17,
+          "most_recent": "2024-02-01 00:00:00",
+          "oldest": "2024-01-15 00:00:00"
+        },
+        "top_values": [
+          {
+            "value": "2024-01-15 00:00:00",
+            "count": 2,
+            "percent": 50.0
+          },
+          {
+            "value": "2024-01-20 00:00:00",
+            "count": 1,
+            "percent": 25.0
+          },
+          {
+            "value": "2024-02-01 00:00:00",
+            "count": 1,
+            "percent": 25.0
+          }
+        ]
+      },
+      "status": {
+        "name": "status",
+        "dtype": "str",
+        "total_count": 4,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 1,
+        "unique_percent": 25.0,
+        "type_category": "string",
+        "patterns": {
+          "min_length": 7,
+          "max_length": 7,
+          "avg_length": 7.0,
+          "empty_strings": 0,
+          "has_email_pattern": false,
+          "has_phone_pattern": false,
+          "has_url_pattern": false
+        },
+        "top_values": [
+          {
+            "value": "pending",
+            "count": 4,
+            "percent": 100.0
+          }
+        ]
+      }
+    },
+    "completeness_score": 100.0,
+    "data_types": {
+      "numeric": 3,
+      "datetime": 1,
+      "string": 1
+    }
+  },
+  "products": {
+    "table_name": "products",
+    "profiled_at": "2026-02-05T14:51:26.545142",
+    "sample_size": 3,
+    "columns": {
+      "product_id": {
+        "name": "product_id",
+        "dtype": "int64",
+        "total_count": 3,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 3,
+        "unique_percent": 100.0,
+        "type_category": "numeric",
+        "statistics": {
+          "min": 1.0,
+          "max": 3.0,
+          "mean": 2.0,
+          "median": 2.0,
+          "std": 1.0,
+          "q25": 1.5,
+          "q75": 2.5
+        },
+        "outliers": {
+          "method": "iqr",
+          "count": 0,
+          "percent": 0.0,
+          "lower_bound": -1.5,
+          "upper_bound": 5.5
+        },
+        "top_values": [
+          {
+            "value": "1",
+            "count": 1,
+            "percent": 33.33333333333333
+          },
+          {
+            "value": "2",
+            "count": 1,
+            "percent": 33.33333333333333
+          },
+          {
+            "value": "3",
+            "count": 1,
+            "percent": 33.33333333333333
+          }
+        ]
+      },
+      "product_name": {
+        "name": "product_name",
+        "dtype": "str",
+        "total_count": 3,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 3,
+        "unique_percent": 100.0,
+        "type_category": "string",
+        "patterns": {
+          "min_length": 8,
+          "max_length": 8,
+          "avg_length": 8.0,
+          "empty_strings": 0,
+          "has_email_pattern": false,
+          "has_phone_pattern": false,
+          "has_url_pattern": false
+        },
+        "top_values": [
+          {
+            "value": "Widget A",
+            "count": 1,
+            "percent": 33.33333333333333
+          },
+          {
+            "value": "Widget B",
+            "count": 1,
+            "percent": 33.33333333333333
+          },
+          {
+            "value": "Gadget X",
+            "count": 1,
+            "percent": 33.33333333333333
+          }
+        ]
+      },
+      "price": {
+        "name": "price",
+        "dtype": "float64",
+        "total_count": 3,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 3,
+        "unique_percent": 100.0,
+        "type_category": "numeric",
+        "statistics": {
+          "min": 19.99,
+          "max": 49.99,
+          "mean": 33.32333333333333,
+          "median": 29.99,
+          "std": 15.275252316519468,
+          "q25": 24.99,
+          "q75": 39.99
+        },
+        "outliers": {
+          "method": "iqr",
+          "count": 0,
+          "percent": 0.0,
+          "lower_bound": -20.010000000000016,
+          "upper_bound": 84.99000000000001
+        },
+        "top_values": [
+          {
+            "value": "29.99",
+            "count": 1,
+            "percent": 33.33333333333333
+          },
+          {
+            "value": "49.99",
+            "count": 1,
+            "percent": 33.33333333333333
+          },
+          {
+            "value": "19.99",
+            "count": 1,
+            "percent": 33.33333333333333
+          }
+        ]
+      },
+      "category": {
+        "name": "category",
+        "dtype": "str",
+        "total_count": 3,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 2,
+        "unique_percent": 66.66666666666666,
+        "type_category": "string",
+        "patterns": {
+          "min_length": 11,
+          "max_length": 11,
+          "avg_length": 11.0,
+          "empty_strings": 0,
+          "has_email_pattern": false,
+          "has_phone_pattern": false,
+          "has_url_pattern": false
+        },
+        "top_values": [
+          {
+            "value": "Electronics",
+            "count": 2,
+            "percent": 66.66666666666666
+          },
+          {
+            "value": "Accessories",
+            "count": 1,
+            "percent": 33.33333333333333
+          }
+        ]
+      },
+      "created_at": {
+        "name": "created_at",
+        "dtype": "datetime64[us]",
+        "total_count": 3,
+        "null_count": 0,
+        "null_percent": 0.0,
+        "unique_count": 1,
+        "unique_percent": 33.33333333333333,
+        "type_category": "datetime",
+        "temporal": {
+          "min_date": "2026-02-05 14:50:42.280323",
+          "max_date": "2026-02-05 14:50:42.280323",
+          "range_days": 0,
+          "most_recent": "2026-02-05 14:50:42.280323",
+          "oldest": "2026-02-05 14:50:42.280323"
+        },
+        "top_values": [
+          {
+            "value": "2026-02-05 14:50:42.280323",
+            "count": 3,
+            "percent": 100.0
+          }
+        ]
+      }
+    },
+    "completeness_score": 100.0,
+    "data_types": {
+      "numeric": 2,
+      "string": 2,
+      "datetime": 1
+    }
+  }
+}

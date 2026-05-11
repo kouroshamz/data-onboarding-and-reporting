@@ -1,0 +1,41 @@
+.DS_Store
+/ci-artifacts/
+/data-onboarding-system/test_reports/
+/data-onboarding-system/reports/
+/data-onboarding-system/logs/
+
+# Secrets and local config – never commit
+.env
+config.yaml
+*.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# LLM caches
+**/.llm_cache/
+**/llm_cache/
+
+# OS
+.DS_Store
+**/.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Virtualenv
+.venv/
+venv/
+env/
+
+# Build / dist
+build/
+dist/
+*.egg-info/
