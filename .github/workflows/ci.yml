@@ -46,6 +46,17 @@ jobs:
           docker compose -f docker-compose.test.yml logs test-postgres
           exit 1
 
+      - name: Generate test datasets
+        run: |
+          cd data-onboarding-system
+          docker run --rm \
+            -e PYTHONPATH=/app \
+            -v "$PWD:/app" \
+            -w /app \
+            --entrypoint bash \
+            data-onboarding-test:ci \
+            -c "pip install --quiet seaborn scikit-learn && python tests/fixtures/datasets/generate_datasets.py"
+
       - name: Run unit + integration tests
         run: |
           cd data-onboarding-system

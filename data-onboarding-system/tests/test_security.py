@@ -41,7 +41,7 @@ def test_masker_partial_phone():
 def test_masker_preserves_nulls():
     df = pd.DataFrame({"email": [None, "x@y.com"]})
     masked = DataMasker().mask_dataframe(df)
-    assert masked["email"].iloc[0] is None
+    assert pd.isna(masked["email"].iloc[0])
 
 
 def test_masker_get_masked_columns():

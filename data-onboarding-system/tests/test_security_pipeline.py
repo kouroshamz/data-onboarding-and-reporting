@@ -144,8 +144,8 @@ class TestDataMasker:
         masker = DataMasker()
         df = pd.DataFrame({"email": [None, "test@test.com", float("nan")]})
         masked = masker.mask_dataframe(df)
-        assert masked["email"].iloc[0] is None
-        assert masked["email"].iloc[2] is None
+        assert pd.isna(masked["email"].iloc[0])
+        assert pd.isna(masked["email"].iloc[2])
         assert masked["email"].iloc[1].startswith("HASH_")
 
     def test_hash_strategy_preserves_uniqueness(self):

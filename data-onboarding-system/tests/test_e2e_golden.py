@@ -58,4 +58,9 @@ def test_e2e_pipeline_generates_expected_artifacts_and_metrics(tmp_path):
     assert report_data["pii"]["summary"]["tables_with_pii"] >= 1
     assert len(report_data["relationships"]["relationships"]) >= 1
     assert report_data["kpis"]
-    assert all(0 <= q["quality_score"] <= 100 for q in report_data["quality"].values())
+    quality = report_data["quality"]
+    assert 0 <= quality["overall_score"] <= 100
+    assert all(
+        0 <= t["overall_score"] <= 100
+        for t in quality["tables"].values()
+    )
